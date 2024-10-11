@@ -31,21 +31,20 @@ body {
     align-items: center;
 }
 
-.animated-characters {
-    width: 80%;
+.logo {
+    width: 100%;
     text-align: center;
 }
 
-.animated-characters img {
-    max-width: 100%;
+.logo img {
+    width: 50%;
     height: auto;
 }
 
 /* Sección derecha: formulario de inicio de sesión */
 .right-side {
     flex: 1;
-    
-    background: linear-gradient(180deg, #b4edf5, #e9b5ff);
+    background-color: #b4edf5;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -91,7 +90,7 @@ h2 {
 .login-btn {
     width: 100%;
     padding: 10px;
-    background-color: #30d6ff;
+    background-color: #55d7f8;
     color: white;
     border: none;
     border-radius: 5px;
@@ -100,5 +99,5 @@ h2 {
 }
 
 .login-btn:hover {
-    background-color: #ca37ff;
+    background-color: #d56dfa;
 }
