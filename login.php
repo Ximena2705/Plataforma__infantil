@@ -5,38 +5,52 @@ include("conexion.php");
 if (!empty($_POST)) {
     $usuario = mysqli_real_escape_string($conn, $_POST['user']);
     $contraseña = mysqli_real_escape_string($conn, $_POST['pass']);
-    $contraseña_encriptada = sha1($contraseña);  // Encriptar la contraseña
 
-    // Mostrar para depurar
-    echo "Usuario: " . $usuario . "<br>";
-    echo "Contraseña encriptada: " . $contraseña_encriptada . "<br>";
+    // Consulta para obtener la contraseña guardada en la base de datos en texto plano
+    $sql = "SELECT id, nombre1, nombre2, apellido1, apellido2, contraseña FROM persona WHERE usuario = '$usuario'";
 
-    $sql = "SELECT id FROM persona WHERE usuario = '$usuario' AND contraseña = '$contraseña_encriptada'";
     $resultado = $conn->query($sql);
 
-    // Depuración de la consulta SQL
     if ($resultado) {
-        echo "Consulta SQL exitosa.<br>";
-        echo "Número de filas encontradas: " . $resultado->num_rows . "<br>";
-        
+        // Verificar si se encontró un usuario con el nombre ingresado
         if ($resultado->num_rows > 0) {
             $row = $resultado->fetch_assoc();
-            $_SESSION['id_persona'] = $row['id'];
-            $_SESSION['usuario'] = $usuario;  // Almacenar el nombre de usuario en la sesión
-            header("Location: inicio.php");
-            exit();
+            $contraseña_guardada = $row['contraseña']; // Contraseña guardada en la base de datos (en texto plano)
+
+            // Comparar la contraseña ingresada con la almacenada (en texto plano)
+            if ($contraseña === $contraseña_guardada) {
+                // Si la contraseña es correcta, guardar la sesión
+                $_SESSION['id_persona'] = $row['id'];
+                $_SESSION['usuario'] = $usuario;  // Guardar el nombre de usuario en la sesión
+                $_SESSION['nombre1'] = $row['nombre1'];
+                $_SESSION['nombre2'] = $row['nombre2'];
+                $_SESSION['apellido1'] = $row['apellido1'];
+                $_SESSION['apellido2'] = $row['apellido2'];
+                
+                header("Location: inicio.php");
+                exit(); // Terminar la ejecución para evitar seguir ejecutando código
+            } else {
+                // Si la contraseña es incorrecta
+                echo "<script>
+                        alert('Usuario o contraseña incorrecto');
+                        window.location = 'login.php';
+                      </script>";
+            }
         } else {
+            // Si no se encontró ningún usuario con ese nombre
             echo "<script>
                     alert('Usuario o contraseña incorrecto');
                     window.location = 'login.php';
                   </script>";
         }
     } else {
-        echo "Error en la consulta SQL: " . $conn->error; // Muestra cualquier error de la consulta
+        // En caso de que haya un error en la consulta SQL
+        echo "Error en la consulta SQL: " . $conn->error . "<br>";
     }
-    
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">

@@ -1,5 +1,6 @@
 <?php
 session_start();  // Iniciar la sesión
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -11,16 +12,18 @@ session_start();  // Iniciar la sesión
 </head>
 <body>
     <?php
-    // Recuperar el nombre de usuario de la sesión
-    if (isset($_SESSION['usuario'])) {
-        $usuario = htmlspecialchars($_SESSION['usuario'], ENT_QUOTES, 'UTF-8');
-        echo "<h3>Bienvenido, $usuario</h3>";
+    // Recuperar la información del usuario de la sesión
+    if (isset($_SESSION['nombre1'])) {
+        $nombre1 = htmlspecialchars($_SESSION['nombre1'], ENT_QUOTES, 'UTF-8');
+        $nombre2 = htmlspecialchars($_SESSION['nombre2'], ENT_QUOTES, 'UTF-8');
+        $apellido1 = htmlspecialchars($_SESSION['apellido1'], ENT_QUOTES, 'UTF-8');
+        $apellido2 = htmlspecialchars($_SESSION['apellido2'], ENT_QUOTES, 'UTF-8');
+        echo "<h3>Bienvenido, $nombre1 $nombre2 $apellido1 $apellido2</h3>";
     } else {
-        echo "<h3>Bienvenido</h3>"; // Mensaje predeterminado si no hay usuario
+        echo "<h3>.</h3>"; // Mensaje predeterminado si no hay información del usuario
     }
     ?>
     <section>
-        <h1>BIENVENIDO</h1>
         <a href="login.php">Cerrar sesión</a>
     </section>
 </body>
