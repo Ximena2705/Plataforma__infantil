@@ -104,3 +104,33 @@ input[type="submit"]:hover{
     transition: .5s;
 }
 
+/*_------------------------------------------------------------------------------------------------------------------------- */
+
+
+.container-registro {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.container-registro h2, h3 {
+    color: #333;
+}
+
+.container-registro label {
+    display: block;
+    margin-top: 10px;
+}
+
+.container-registro input[type="text"], input[type="date"], select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
