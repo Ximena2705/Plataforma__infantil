@@ -65,10 +65,11 @@
 
                 <label for="usuario">Usuario:</label>
                 <input type="text" name="usuario" required>
-
+                
+                <!-- 
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" name="fecha_nacimiento" required>
-
+                -->
                 <label for="grado">Grado:</label>
                 <select name="grado" required>
                     <option value="primero">Primero</option>
