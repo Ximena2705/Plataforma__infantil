@@ -1,5 +1,6 @@
 <?php
-session_start();  // Iniciar la sesión
+session_start();
+include("conexion.php");
 
 ?>
 <!DOCTYPE html>
@@ -11,21 +12,50 @@ session_start();  // Iniciar la sesión
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <?php
-    // Recuperar la información del usuario de la sesión
-    if (isset($_SESSION['nombre1'])) {
-        $nombre1 = htmlspecialchars($_SESSION['nombre1'], ENT_QUOTES, 'UTF-8');
-        $nombre2 = htmlspecialchars($_SESSION['nombre2'], ENT_QUOTES, 'UTF-8');
-        $apellido1 = htmlspecialchars($_SESSION['apellido1'], ENT_QUOTES, 'UTF-8');
-        $apellido2 = htmlspecialchars($_SESSION['apellido2'], ENT_QUOTES, 'UTF-8');
-        echo "<h3>Bienvenido, $nombre1 $nombre2 $apellido1 $apellido2</h3>";
-    } else {
-        echo "<h3>.</h3>"; // Mensaje predeterminado si no hay información del usuario
-    }
-    ?>
-    <section>
+
+<?php
+// Verificar si la sesión está activa
+if (!isset($_SESSION['documento'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Obtener el documento y tipo de persona de la sesión
+$documento = $_SESSION['documento'];
+$tipo_persona = $_SESSION['tipo_persona'];
+
+// Inicializar las variables para los nombres
+$nombre1 = '';
+$nombre2 = '';
+$apellido1 = '';
+$apellido2 = '';
+
+// Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
+if ($tipo_persona == 'admin') {
+    $sql = "SELECT nombre1, nombre2, apellido1, apellido2 FROM admin WHERE cedula = '$documento'";
+} elseif ($tipo_persona == 'docente') {
+    $sql = "SELECT nombre1, nombre2, apellido1, apellido2 FROM docente WHERE cedula = '$documento'";
+} elseif ($tipo_persona == 'estudiante') {
+    $sql = "SELECT nombre1, nombre2, apellido1, apellido2 FROM estudiante WHERE tarjeta_identidad = '$documento'";
+}
+
+$resultado = $conn->query($sql);
+
+if ($resultado && $resultado->num_rows > 0) {
+    $row = $resultado->fetch_assoc();
+    $nombre1 = $row['nombre1'];
+    $nombre2 = $row['nombre2'];
+    $apellido1 = $row['apellido1'];
+    $apellido2 = $row['apellido2'];
+}
+
+// Mostrar el nombre completo
+echo "<h3>Bienvenido, $nombre1 $nombre2 $apellido1 $apellido2</h3>";
+
+?>
+
+  <section>
         <a href="login.php">Cerrar sesión</a>
     </section>
-</body>
+    </body>
 </html>
-

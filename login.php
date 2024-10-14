@@ -5,51 +5,50 @@ include("conexion.php");
 if (!empty($_POST)) {
     $usuario = mysqli_real_escape_string($conn, $_POST['user']);
     $contraseña = mysqli_real_escape_string($conn, $_POST['pass']);
+    
+    // Mostrar para depuración
+    echo "Usuario: " . $usuario . "<br>";
+    echo "Contraseña ingresada: " . $contraseña . "<br>";
 
-    // Consulta para obtener la contraseña guardada en la base de datos en texto plano
-    $sql = "SELECT id, nombre1, nombre2, apellido1, apellido2, contraseña FROM persona WHERE usuario = '$usuario'";
-
+    // Consulta para verificar el usuario y la contraseña en la tabla persona
+    $sql = "SELECT documento, tipo_persona, contraseña FROM persona WHERE usuario = '$usuario'";
     $resultado = $conn->query($sql);
 
-    if ($resultado) {
-        // Verificar si se encontró un usuario con el nombre ingresado
-        if ($resultado->num_rows > 0) {
-            $row = $resultado->fetch_assoc();
-            $contraseña_guardada = $row['contraseña']; // Contraseña guardada en la base de datos (en texto plano)
+    if ($resultado && $resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
+        $documento = $row['documento'];
+        $tipo_persona = $row['tipo_persona'];
+        $contraseña_guardada = $row['contraseña'];
 
-            // Comparar la contraseña ingresada con la almacenada (en texto plano)
-            if ($contraseña === $contraseña_guardada) {
-                // Si la contraseña es correcta, guardar la sesión
-                $_SESSION['id_persona'] = $row['id'];
-                $_SESSION['usuario'] = $usuario;  // Guardar el nombre de usuario en la sesión
-                $_SESSION['nombre1'] = $row['nombre1'];
-                $_SESSION['nombre2'] = $row['nombre2'];
-                $_SESSION['apellido1'] = $row['apellido1'];
-                $_SESSION['apellido2'] = $row['apellido2'];
-                
-                header("Location: inicio.php");
-                exit(); // Terminar la ejecución para evitar seguir ejecutando código
-            } else {
-                // Si la contraseña es incorrecta
-                echo "<script>
-                        alert('Usuario o contraseña incorrecto');
-                        window.location = 'login.php';
-                      </script>";
-            }
+        // Mostrar para depuración
+        echo "Documento: " . $documento . "<br>";
+        echo "Tipo de Persona: " . $tipo_persona . "<br>";
+        echo "Contraseña guardada en la base de datos: " . $contraseña_guardada . "<br>";
+
+        // Comparar la contraseña en texto plano
+        if ($contraseña == $contraseña_guardada) {
+            $_SESSION['documento'] = $documento;
+            $_SESSION['tipo_persona'] = $tipo_persona;
+
+            // Redirigir al inicio
+            header("Location: inicio.php");
+            exit();
         } else {
-            // Si no se encontró ningún usuario con ese nombre
+            // Contraseña incorrecta
             echo "<script>
                     alert('Usuario o contraseña incorrecto');
                     window.location = 'login.php';
                   </script>";
         }
     } else {
-        // En caso de que haya un error en la consulta SQL
-        echo "Error en la consulta SQL: " . $conn->error . "<br>";
+        // Usuario no encontrado
+        echo "<script>
+                alert('Usuario o contraseña incorrecto');
+                window.location = 'login.php';
+              </script>";
     }
 }
 ?>
-
 
 
 <!DOCTYPE html>
