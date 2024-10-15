@@ -55,7 +55,10 @@ echo "<h3>Bienvenido, $nombre1 $nombre2 $apellido1 $apellido2</h3>";
 ?>
 
   <section>
-        <a href="login.php">Cerrar sesión</a>
+        <a href="registro.php">ir a registro<br></a>
+    </section>
+    <section>
+        <a href="login.php"><br>cerrar sesion</a>
     </section>
     </body>
 </html>
