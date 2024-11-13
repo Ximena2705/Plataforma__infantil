@@ -1,147 +1,82 @@
+/* Estilos generales */
 body {
-    background-color: #f4f4f4;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    overflow: hidden;
 }
 
-.background-image {
-    background-image: url('imagenes/fondo\ infantil.jpg'); 
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    height: 100%;
-    width: 100%;
+/* Contenedor superior */
+.top-container {
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
 .button-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0b7f9c;
-    padding: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
 }
 
-.right-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 50px; 
-    width: 100%; 
-}
-
-.button-container button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #0b7f9c;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.toggle-door {
-    margin-right: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.toggle-door i {
-    margin-right: 10px; 
-}
-
-.button-container button:hover {
-    background-color: #195463;
-}
-
-.door-content {
-    display: none;
-    width: 5cm; 
-    height: calc(100vh - 60px); 
-    background-color: #0b7f9c; 
-    padding: 20px;
-    border-radius: 5px;
-    position: fixed;
-    top: 60px; 
-    left: 0;
-    z-index: 900; 
-}
-
-.door-content.active {
-    display: block;
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column; 
-    margin-top: 10px;
-}
-
-.button-group button {
-    background-color: #0b7f9c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 10px; 
-    transition: background-color 0.3s;
-}
-
-.button-group button:hover {
-    background-color: #0f3c47;
-}
-
-/* Botones con iconos para Registro y Cerrar Sesión */
-.bottom-buttons {
-    position: absolute;
-    bottom: 40px;
-    width: 100%;
-    text-align: center;
-}
-
-.icon-button {
-    background-color: #0b7f9c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.icon-button:hover {
-    background-color: #124552;
-}
-
-.welcome-container h1{
-    margin-top:100px
+.right-buttons h1 {
+    display: inline-block;
+    margin-right: 10px;
 }
 
 button {
-    width: 10%;
     padding: 10px;
-    background-color: #55d7f8;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ddd;
+}
+
+/* Contenedor inferior */
+.bottom-container {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.door-content {
+    margin-top: 20px;
+}
+
+.icon-button {
+    padding: 10px 20px;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
-    outline: none;
 }
 
-button :hover{
-    background-color: #d56dfa;
-    transition: .5s;
+.icon-button:hover {
+    background-color: #0056b3;
+}
+
+button.toggle-door {
+    background-color: #008CBA;
+    color: white;
+}
+
+button.toggle-door i {
+    margin-right: 8px;
+}
+ 
+.image-container {
+    text-align: center; /* Centra la imagen horizontalmente */
+    margin-top: 100px;
+}
+
+.image-container img {
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Ajusta el ancho al 80% del contenedor */
+    max-width: 1200px; /* Limita el ancho máximo */
+    height: auto;
+    display: block; /* Asegura que la imagen sea un bloque */
+    margin: 0 auto; /* Centra la imagen */
+    top: 20px;  /* Mueve la imagen hacia abajo */
+    left: 0;  /* No es necesario moverla a la derecha */
 }
