@@ -20,12 +20,12 @@ $apellido2 = '';
 
 // Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
 if ($tipo_persona == 'admin') {
-    $sql = "SELECT nombre1, apellido1 FROM admin WHERE cedula = '$documento'";
+    $sql = "SELECT nombre1, nombre2, apellido1, apellido2 FROM admin WHERE cedula = '$documento'";
 } 
 elseif ($tipo_persona == 'docente') {
-    $sql = "SELECT doc_nombre1, doc_apellido1 FROM docente WHERE cedula = '$documento'";
+    $sql = "SELECT doc_nombre1, doc_nombre2, doc_apellido1, doc_apellido2 FROM docente WHERE cedula = '$documento'";
 } elseif ($tipo_persona == 'estudiante') {
-    $sql = "SELECT est_nombre1, est_apellido1 FROM estudiante WHERE tarjeta_identidad = '$documento'";
+    $sql = "SELECT est_nombre1, est_nombre1, est_apellido1, est_apellido2 FROM estudiante WHERE tarjeta_identidad = '$documento'";
 }
 
 $resultado = $conn->query($sql);
@@ -53,7 +53,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
 
 
-$nombre_completo = "$nombre1 $nombre2 $apellido1 $apellido2";
+$nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2;
 ?>
 
 
