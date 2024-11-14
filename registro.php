@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include("conexion.php");
 
 if ($conn->connect_error) {
@@ -153,16 +153,9 @@ include("header.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido</title>
     <link rel="stylesheet" href="stilos.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        /* Estilo para centrar el texto del contenedor de bienvenida */
-        .welcome-container {
-            text-align: center; /* Centrar el contenido */
-            margin-top: 100px; /* Espacio superior */
-            font-size: 24px; /* Tamaño de la fuente */
-            color: #333; /* Color del texto */
-        }
-    </style>
+    
     <script>
         function mostrarCampos() {
             var tipoPersona = document.querySelector('input[name="tipo_persona"]:checked').value;
@@ -199,6 +192,7 @@ include("header.php");
             <i class="fas fa-user"></i> <span id="userName" style="display: none;"><?php echo $nombre_completo; ?></span>
         </button>
         <div class="right-buttons">
+            <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
             <h1><button>Primero</button><h1>
             <h1><button>Segundo</button><h1>
             <h1> <button>Tercero</button><h1>
@@ -210,7 +204,7 @@ include("header.php");
         <br><br>
         <div class="button-group">
             <button onclick="showAsignaturas()">Asignaturas</button>
-            <button onclick="showPerfilCompleto()">Mi perfil</button>
+            <button onclick="window.location.href='perfil.php'">Mi perfil</button>
         </div>
 
         <div class="bottom-buttons">
@@ -226,44 +220,50 @@ include("header.php");
     </div>
 
     <!-- Contenedor para el mensaje de bienvenida -->
-    <div class="welcome-container">
-        
-        
+    <div class="form-container">
         <h1>Registro</h1>
         <form method="post" action="">
-            <div>
+            <div class="radio-options">
                 <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()" required> Docente</label>
                 <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos()"> Estudiante</label>
             </div>
+
             <div id="campos_docente" style="display:none;">
                 <h2>Datos del Docente</h2>
-                <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
-                <label>Nombre 1: <input type="text" name="doc_nombre1" id="doc_nombre1"></label>
-                <label>Nombre 2: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
-                <label>Apellido 1: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
-                <label>Apellido 2: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
-                <label>Asignatura: <input type="text" name="asignatura" id="asignatura"></label>
+                <div class="field-group">
+                    <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
+                    <label>Nombre 1: <input type="text" name="doc_nombre1" id="doc_nombre1"></label>
+                    <label>Nombre 2: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
+                    <label>Apellido 1: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
+                    <label>Apellido 2: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
+                    <label>Asignatura: <input type="text" name="asignatura" id="asignatura"></label>
+                </div>
             </div>
+
             <div id="campos_estudiante" style="display:none;">
                 <h2>Datos del Estudiante</h2>
-                <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad"></label>
-                <label>Nombre 1: <input type="text" name="est_nombre1" id="est_nombre1"></label>
-                <label>Nombre 2: <input type="text" name="est_nombre2" id="est_nombre2"></label>
-                <label>Apellido 1: <input type="text" name="est_apellido1" id="est_apellido1"></label>
-                <label>Apellido 2: <input type="text" name="est_apellido2" id="est_apellido2"></label>
-                <label>Grado: 
-                    <select name="grado" id="grado">
-                        <option value="">Selecciona un grado</option>
-                        <option value="primero">Primero</option>
-                        <option value="segundo">Segundo</option>
-                        <option value="tercero">Tercero</option>
-                    </select>
-                </label>
+                <div class="field-group">
+                    <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad"></label>
+                    <label>Nombre 1: <input type="text" name="est_nombre1" id="est_nombre1"></label>
+                    <label>Nombre 2: <input type="text" name="est_nombre2" id="est_nombre2"></label>
+                    <label>Apellido 1: <input type="text" name="est_apellido1" id="est_apellido1"></label>
+                    <label>Apellido 2: <input type="text" name="est_apellido2" id="est_apellido2"></label>
+                    <label>Grado: 
+                        <select name="grado" id="grado">
+                            <option value="">Selecciona un grado</option>
+                            <option value="primero">Primero</option>
+                            <option value="segundo">Segundo</option>
+                            <option value="tercero">Tercero</option>
+                        </select>
+                    </label>
+                </div>
             </div>
-            <button type="submit">Registrar</button>
-            <button class="button" onclick="window.location.href='inicio.php'">
-                <i class="fas fa-sign-out-alt"></i> Regresar
-            </button>
+
+            <!--<div style="display: flex; justify-content: space-between;">
+                <button type="submit">Registrar</button>
+                <button type="button" class="button" onclick="window.location.href='inicio.php'">Regresar</button>
+            </div>
+            --->
         </form>
     </div>
 </div>
