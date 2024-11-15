@@ -42,21 +42,21 @@ include("header.php");
 
        
         <div class="bottom-buttons">
-    <?php if ($tipo_persona == 'admin'): ?>
-        <button class="icon-button" onclick="window.location.href='registro.php'">
-            <i class="fas fa-user-plus"></i> Ir a Registro
-        </button>
-    <?php endif; ?>
-    <button class="icon-button" onclick="window.location.href='login.php'">
-        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-    </button>
+            <?php if ($tipo_persona == 'admin'): ?>
+                <button class="icon-button" onclick="window.location.href='registro.php'">
+                    <i class="fas fa-user-plus"></i> Ir a Registro
+                </button>
+            <?php endif; ?>
+            <button class="icon-button" onclick="window.location.href='login.php'">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
         </div>
 
     </div>
 </div>
 
 
-    <script>
+   <script>
     // Función para mostrar u ocultar el perfil completo
     function toggleProfile() {
         const userName = document.getElementById('userName');
@@ -70,7 +70,7 @@ include("header.php");
             doorContent.style.display = 'none'; // Ocultar la información del perfil
         }
     }
-
+            
     function showAsignaturas() {
         alert("Mostrando las asignaturas del usuario...");
     }
