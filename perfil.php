@@ -1,5 +1,4 @@
 <?php 
-
 session_start();
 include("conexion.php");
 
@@ -21,6 +20,7 @@ $apellido2 = '';
 $grado = '';
 $asignatura = '';
 $numero_documento = '';
+$rutaFoto = '';
 
 // Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
 if ($tipo_persona == 'admin') {
@@ -60,17 +60,28 @@ if ($resultado && $resultado->num_rows > 0) {
     }
 }
 
+// Obtener la ruta de la foto desde la base de datos
+$sqlFoto = "SELECT foto_perfil FROM persona WHERE documento = '$documento'";
+$resultadoFoto = $conn->query($sqlFoto);
+
+if ($resultadoFoto && $resultadoFoto->num_rows > 0) {
+    $rowFoto = $resultadoFoto->fetch_assoc();
+    // Si la foto existe, usar la ruta completa para mostrarla
+    $rutaFoto = !empty($rowFoto['foto_perfil']) 
+        ? 'imagenes/usuarios/' . $rowFoto['foto_perfil'] 
+        : "imagenes/default.webp";
+}
+
 // Concatenar el nombre completo
 $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Perfil</title>
     <link rel="stylesheet" href="stilos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -93,7 +104,7 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
             <div class="perfil">
                 <div class="foto-perfil">
                     <!-- Imagen de perfil, puedes usar una imagen del usuario -->
-                    <img src="imagenes/usuarios/<?php echo $documento; ?>.webp" alt="Foto de perfil">
+                    <img id="fotoPerfil" src="<?php echo $rutaFoto; ?>" alt="Foto de perfil">
                 </div>
                 <div class="informacion-perfil">
                     <h2><?php echo $nombre_completo; ?></h2>
@@ -106,7 +117,10 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
                         <p><strong>Asignatura:</strong> <?php echo $asignatura; ?></p>
                             <?php endif; ?>
                     </ul>
-                    <button onclick="alert('Función para subir foto en desarrollo')">Subir Foto</button>
+                    <form id="fotoForm" action="subir_foto.php" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="foto_perfil" accept="image/*" required>
+                        <button type="submit">Subir Foto</button>
+                    </form>
                 </div>
             </div>
 
@@ -126,9 +140,6 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
             <button onclick="showAsignaturas()">Asignaturas</button>
             <button onclick="window.location.href='perfil.php'">Mi perfil</button>
         </div>
-
-        <!-- Contenedor de perfil -->
-        
 
         <div class="bottom-buttons">
             <?php if ($tipo_persona == 'admin'): ?>
@@ -161,7 +172,29 @@ function toggleProfile() {
 function showAsignaturas() {
     alert("Mostrando las asignaturas del usuario...");
 }
-</script>
 
+document.getElementById("fotoForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evitar que se recargue la página
+
+    let formData = new FormData(this); // Crear un FormData con los datos del formulario
+    fetch("subir_foto.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json()) // Obtener la respuesta en formato JSON
+    .then(data => {
+        alert(data.message); // Mostrar el mensaje con alert()
+        
+        // Si la foto se sube con éxito, actualizar la imagen de perfil en la página
+        if (data.status === "success") {
+            document.querySelector('.foto-perfil img').src = 'imagenes/usuarios/' + '<?php echo $documento; ?>' + ".webp";
+        }
+    })
+    .catch(error => {
+        alert("Ocurrió un error al subir la foto.");
+    });
+});
+
+</script>
 </body>
 </html>

@@ -37,6 +37,10 @@ body {
     width: 100%; 
 }
 
+.button-container {
+    height: 60px;
+    margin-bottom: 10px;
+}
 .button-container button {
     padding: 10px 20px;
     border: none;
@@ -51,6 +55,7 @@ body {
     margin-right: 20px;
     display: flex;
     align-items: center;
+    
 }
 
 .toggle-door i {
@@ -166,13 +171,15 @@ body {
 
 /* Contenedor principal del formulario */
 .form-container {
-    margin-top: 50px;
+    
     max-width: 800px;
-    margin: 50px auto; /* Esto incluye margen superior e inferior */
+    margin-top: 120px; 
+    margin-left: 22%;
     padding: 30px;
     background-color: #f9f9f9;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    
 }
 
 
@@ -253,6 +260,10 @@ body {
     gap: 10px;
 }
 
+.boton-registrar{
+    display: flex; 
+    justify-content: space-between;
+}
 /*---------------------------------------------------------------------PERFIL--------------------------------------------------------------------/*
 
 /* Estilos del perfil */
@@ -325,8 +336,8 @@ body {
   
   .informacion-perfil button[type="button"] {
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #0b7f9c;
+    
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -335,6 +346,6 @@ body {
   }
   
   .informacion-perfil button[type="button"]:hover {
-    background-color: #45a049;
+    background-color: #0b7f9c;
   }
   
