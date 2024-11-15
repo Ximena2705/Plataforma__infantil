@@ -151,7 +151,7 @@ include("header.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
+    <title>Registro</title>
     <link rel="stylesheet" href="stilos.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -229,25 +229,25 @@ include("header.php");
             </div>
 
             <div id="campos_docente" style="display:none;">
-                <h2>Datos del Docente</h2>
+                <h2>Datos del docente</h2>
                 <div class="field-group">
                     <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
-                    <label>Nombre 1: <input type="text" name="doc_nombre1" id="doc_nombre1"></label>
-                    <label>Nombre 2: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
-                    <label>Apellido 1: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
-                    <label>Apellido 2: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
+                    <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1"></label>
+                    <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
+                    <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
+                    <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
                     <label>Asignatura: <input type="text" name="asignatura" id="asignatura"></label>
                 </div>
             </div>
 
             <div id="campos_estudiante" style="display:none;">
-                <h2>Datos del Estudiante</h2>
+                <h2>Datos del estudiante</h2>
                 <div class="field-group">
                     <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad"></label>
-                    <label>Nombre 1: <input type="text" name="est_nombre1" id="est_nombre1"></label>
-                    <label>Nombre 2: <input type="text" name="est_nombre2" id="est_nombre2"></label>
-                    <label>Apellido 1: <input type="text" name="est_apellido1" id="est_apellido1"></label>
-                    <label>Apellido 2: <input type="text" name="est_apellido2" id="est_apellido2"></label>
+                    <label>Primer nombre: <input type="text" name="est_nombre1" id="est_nombre1"></label>
+                    <label>Segundo nombre: <input type="text" name="est_nombre2" id="est_nombre2"></label>
+                    <label>Primer apellido: <input type="text" name="est_apellido1" id="est_apellido1"></label>
+                    <label>Segundo apellido: <input type="text" name="est_apellido2" id="est_apellido2"></label>
                     <label>Grado: 
                         <select name="grado" id="grado">
                             <option value="">Selecciona un grado</option>
@@ -259,11 +259,10 @@ include("header.php");
                 </div>
             </div>
 
-            <!--<div style="display: flex; justify-content: space-between;">
+            <div class="boton-registrar">
                 <button type="submit">Registrar</button>
-                <button type="button" class="button" onclick="window.location.href='inicio.php'">Regresar</button>
             </div>
-            --->
+            
         </form>
     </div>
 </div>
