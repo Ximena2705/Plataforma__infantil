@@ -83,7 +83,10 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
     <link rel="stylesheet" href="stilos.css">
+    <link rel="stylesheet" href="script.js">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
 <div class="background-image">
@@ -117,9 +120,19 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
                         <p><strong>Asignatura:</strong> <?php echo $asignatura; ?></p>
                             <?php endif; ?>
                     </ul>
-                    <form id="fotoForm" action="subir_foto.php" method="POST" enctype="multipart/form-data">
+                    <!-- Botón único para subir foto -->
+                    <button id="subirFotoBtn" onclick="mostrarOpciones()">
+                        <i class="fa fa-camera"></i> Subir foto
+                    </button>
+                    
+                    <!-- Formulario inicialmente oculto -->
+                    <form id="fotoForm" action="subir_foto.php" method="POST" enctype="multipart/form-data" style="display: none;">
                         <input type="file" name="foto_perfil" accept="image/*" required>
-                        <button type="submit">Subir Foto</button>
+                        <br><br>
+                        <div class="botones-formulario">
+                            <button id="enviar" type="submit">Enviar foto</button>
+                            <button onclick="window.location.href='perfil.php'" id="cancelar" type="button">Cancelar</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -173,22 +186,36 @@ function showAsignaturas() {
     alert("Mostrando las asignaturas del usuario...");
 }
 
-document.getElementById("fotoForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evitar que se recargue la página
+document.getElementById("subirFotoBtn").addEventListener("click", function() {
+    const subirFotoBtn = document.getElementById('subirFotoBtn');
+    const fotoForm = document.getElementById('fotoForm');
+    
+    // Mostrar el formulario y ocultar el botón principal
+    subirFotoBtn.style.display = 'none';
+    fotoForm.style.display = 'block';
+});
 
-    let formData = new FormData(this); // Crear un FormData con los datos del formulario
+document.getElementById("fotoForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evitar recargar la página
+
+    let formData = new FormData(this); // Crear el FormData con los datos del formulario
     fetch("subir_foto.php", {
         method: "POST",
         body: formData
     })
-    .then(response => response.json()) // Obtener la respuesta en formato JSON
+    .then(response => response.json()) // Convertir la respuesta a JSON
     .then(data => {
-        alert(data.message); // Mostrar el mensaje con alert()
-        
-        // Si la foto se sube con éxito, actualizar la imagen de perfil en la página
+        alert(data.message); // Mostrar el mensaje al usuario
+
         if (data.status === "success") {
+            // Actualizar la imagen de perfil si la subida fue exitosa
             document.querySelector('.foto-perfil img').src = 'imagenes/usuarios/' + '<?php echo $documento; ?>' + ".webp";
         }
+
+        // Resetear el formulario y volver al estado inicial
+        this.reset();
+        document.getElementById('subirFotoBtn').style.display = 'block';
+        document.getElementById('fotoForm').style.display = 'none';
     })
     .catch(error => {
         alert("Ocurrió un error al subir la foto.");
@@ -196,5 +223,7 @@ document.getElementById("fotoForm").addEventListener("submit", function(event) {
 });
 
 </script>
+
+<!--<script src="script.js"></script>-->
 </body>
 </html>

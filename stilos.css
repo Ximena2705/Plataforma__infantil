@@ -216,34 +216,7 @@ body {
     font-size: 1em;
 }
 
-/* Botones */
-.form-container button[type="submit"],
-.form-container .button {
-    width: 48%;
-    padding: 10px;
-    margin-top: 20px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: #fff;
-}
 
-.form-container button[type="submit"] {
-    background-color: #007bff;
-}
-
-.form-container .button {
-    background-color: #6c757d;
-}
-
-.form-container button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-.form-container .button:hover {
-    background-color: #5a6268;
-}
 
 /* Opciones de radio */
 .radio-options {
@@ -260,9 +233,30 @@ body {
     gap: 10px;
 }
 
-.boton-registrar{
-    display: flex; 
-    justify-content: space-between;
+.boton-registrar button{
+    background-color: #007bff; /* Azul */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+    margin-left: 40%;
+    width: 15%;
+}
+
+.boton-registrar button:hover{
+    background-color: #0056b3; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
 }
 /*---------------------------------------------------------------------PERFIL--------------------------------------------------------------------/*
 
@@ -334,18 +328,86 @@ body {
     margin-right: 5px;
   }
   
-  .informacion-perfil button[type="button"] {
-    padding: 10px;
-    background-color: #0b7f9c;
-    
+  #subirFotoBtn {
+    background-color: #007bff; /* Azul */
+    color: white;
+    padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
     cursor: pointer;
-    margin-top: 20px;
-    width: 30px;
-  }
-  
-  .informacion-perfil button[type="button"]:hover {
-    background-color: #0b7f9c;
-  }
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+    margin-left: 33%;
+}
+
+#subirFotoBtn:hover ,#fotoForm #enviar:hover{
+    background-color: #0056b3; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+#fotoForm #cancelar:hover{
+    background-color: #b30000; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+#subirFotoBtn:active {
+    transform: scale(0.95); /* Reducir ligeramente al hacer clic */
+}
+
+#subirFotoBtn i {
+    font-size: 18px; /* Tamaño del ícono */
+}
+
+/* Contenedor para los botones del formulario */
+.botones-formulario {
+    display: flex; /* Activar flexbox */
+    justify-content: center; /* Centrar horizontalmente */
+    gap: 15px; /* Separación horizontal entre botones */
+    margin-top: 10px; /* Espacio superior opcional */
+} 
+
+#fotoForm #enviar{
+    background-color: #007bff; /* Azul */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+}
+
+#fotoForm #cancelar{
+    background-color: #ff0000; /* Azul */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+}
   
