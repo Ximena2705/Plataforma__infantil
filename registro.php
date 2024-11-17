@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sqlVerificarCedula = "SELECT COUNT(*) AS conteo FROM docente WHERE cedula = '$cedula'";
         $resultado = $conn->query($sqlVerificarCedula);
         $row = $resultado->fetch_assoc();
-
+        
         if ($row['conteo'] > 0) {
             $mensaje = "Este documento ya existe.";
         } else {
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sqlPersona = "INSERT INTO persona (documento, tipo_persona, usuario, contraseña) 
                                    VALUES ('$cedula', 'docente', '$usuario', '$contraseña')";
                     if ($conn->query($sqlPersona) === TRUE) {
-                        $mensaje = "Docente registrado con éxito";
+                        $mensaje = "Docente registrado con éxito. Usuario: $usuario";
                     } else {
                         $mensaje = "Error al registrar en tabla persona: " . $conn->error;
                     }
@@ -139,6 +139,7 @@ elseif ($tipoPersona === 'estudiante') {
 ?>
 
 
+
 <?php
 
 include("header.php");
@@ -180,7 +181,13 @@ include("header.php");
                 document.getElementById('doc_apellido2').value = '';
                 document.getElementById('asignatura').value = '';
             }
+
+            // Mostrar el botón de registrar
+            botonRegistrar.style.display = "block";
+
         }
+
+        
     </script>
 </head>
 <body>
@@ -224,15 +231,15 @@ include("header.php");
         <h1>Registro</h1>
         <form method="post" action="">
             <div class="radio-options">
-                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()" required> Docente</label>
-                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos()"> Estudiante</label>
+                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()" > Docente</label>
+                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos() "> Estudiante</label>
             </div>
 
             <div id="campos_docente" style="display:none;">
                 <h2>Datos del docente</h2>
                 <div class="field-group">
                     <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
-                    <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1"></label>
+                    <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1" ></label>
                     <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
                     <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
                     <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
@@ -258,8 +265,8 @@ include("header.php");
                     </label>
                 </div>
             </div>
-
-            <div class="boton-registrar">
+            <br>
+            <div class="boton-registrar" style="display: none;" id="botonRegistrar">
                 <button type="submit">Registrar</button>
             </div>
             
@@ -289,6 +296,8 @@ include("header.php");
     function showPerfilCompleto() {
         alert("Mostrando el perfil completo del usuario...");
     }
+
+   
 </script>
 </body>
 </html>
