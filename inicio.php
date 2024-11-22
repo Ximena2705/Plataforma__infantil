@@ -11,13 +11,15 @@ include("header.php");
     <title>Inicio</title>
     <link rel="stylesheet" href="stilos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
 <div class="background-image">
     <div class="button-container">
         <!-- Botón de perfil con solo el icono inicialmente -->
         <button class="toggle-door" onclick="toggleProfile()">
-            <i class="fas fa-user"></i> <span id="userName" style="display: none;"><?php echo $nombre_completo; ?></span>
+            <i class="fas fa-bars"></i><span id="userName" style="display: none;"><?php echo $nombre; ?></span>
         </button>
         <div class="right-buttons">
             <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
@@ -36,8 +38,10 @@ include("header.php");
     <div class="door-content" id="doorContent" style="display: none;">
 <br><br>
         <div class="button-group">
-            <button onclick="showAsignaturas()">Asignaturas</button>
-            <button onclick="window.location.href='perfil.php'">Mi perfil</button>
+            <!--    <button onclick="showAsignaturas()">Asignaturas</button> -->
+            <button onclick="window.location.href='perfil.php'">
+                <i class="fas fa-user"></i>&nbsp;&nbsp;Mi perfil
+            </button>
         </div>
 
        
