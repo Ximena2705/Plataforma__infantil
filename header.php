@@ -52,7 +52,7 @@ if ($resultado && $resultado->num_rows > 0) {
 }
 
 
-
+$nombre=  $nombre1 . ' ' . $apellido1;
 $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2;
 ?>
 
