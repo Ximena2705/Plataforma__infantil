@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sqlPersona = "INSERT INTO persona (documento, tipo_persona, usuario, contraseña) 
                                    VALUES ('$cedula', 'docente', '$usuario', '$contraseña')";
                     if ($conn->query($sqlPersona) === TRUE) {
-                        alert("Docente registrado con éxito. Usuario: $usuario");
+                        $mensaje = "Docente registrado con éxito. Usuario: $usuario";
                     } else {
                         $mensaje = "Error al registrar en tabla persona: " . $conn->error;
                     }
@@ -118,7 +118,7 @@ elseif ($tipoPersona === 'estudiante') {
             $sqlPersonaEstudiante = "INSERT INTO persona (documento, tipo_persona, usuario, contraseña) 
                                      VALUES ('$tarjetaIdentidad', 'estudiante', '$usuario', '$contraseña')";
             if ($conn->query($sqlPersonaEstudiante) === TRUE) {
-                alert("Estudiante registrado exitosamente. Usuario: $usuario");
+                $mensaje = "Estudiante registrado exitosamente. Usuario: $usuario";
             } else {
                 $mensaje = "Error al registrar en tabla persona: " . $conn->error;
             }
