@@ -73,6 +73,7 @@ if ($resultadoFoto && $resultadoFoto->num_rows > 0) {
 }
 
 // Concatenar el nombre completo
+$nombre=  $nombre1 . ' ' . $apellido1;
 $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellido2;
 ?>
 
@@ -93,7 +94,7 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
     <div class="button-container">
         <!-- Botón de perfil con solo el icono inicialmente -->
         <button class="toggle-door" onclick="toggleProfile()">
-            <i class="fas fa-user"></i> <span id="userName" style="display: none;"><?php echo $nombre_completo; ?></span>
+            <i class="fas fa-bars"></i><span id="userName" style="display: none;"><?php echo $nombre; ?></span>
         </button>
         <div class="right-buttons">
             <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
@@ -137,12 +138,12 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
                 </div>
             </div>
 
-            <!-- Espacio para otros trabajos u opciones -->
-            <div class="trabajos-subidos">
-                <h2>Documentos Subidos</h2>
-                <div class="trabajo">
-                    <i class="far fa-file-pdf"></i>
-                    <a href="#">Ejemplo de Documento</a>
+            
+            <div class="configuracion">
+                <h2><i class="fa-solid fa-gear"></i>&nbsp;Configuración</h2>
+                <hr>
+                <div class="ajustes">
+                    <a href="cambiar_contraseña.php" class="link-accion"><i class="fa-solid fa-shield"></i>&nbsp;Cambiar contraseña</a>
                 </div>
             </div>
         </div>
@@ -150,8 +151,10 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
     <div class="door-content" id="doorContent" style="display: none;">
         <br><br>
         <div class="button-group">
-            <button onclick="showAsignaturas()">Asignaturas</button>
-            <button onclick="window.location.href='perfil.php'">Mi perfil</button>
+        <!--    <button onclick="showAsignaturas()">Asignaturas</button> -->
+            <button onclick="window.location.href='perfil.php'">
+                <i class="fas fa-user"></i>&nbsp;&nbsp;Mi perfil
+            </button>
         </div>
 
         <div class="bottom-buttons">
