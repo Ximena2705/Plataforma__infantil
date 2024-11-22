@@ -32,13 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($row['conteo'] > 0) {
             $mensaje = "Este documento ya existe.";
-        } else {
-            // Validaciones
-            if (!preg_match('/^[0-9]+$/', $cedula)) {
-                $mensaje = "La cédula debe contener solo números.";
-            } elseif (!preg_match('/^[a-zA-Z]+$/', $doc_nombre1) || !preg_match('/^[a-zA-Z]+$/', $doc_apellido1)) {
-                $mensaje = "Los nombres y apellidos deben contener solo letras.";
-            } else {
+        }  
+        else {
                 // Asignar cédula como usuario y contraseña
                 $usuario = $cedula;
                 $contraseña = $cedula;
@@ -52,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sqlPersona = "INSERT INTO persona (documento, tipo_persona, usuario, contraseña) 
                                    VALUES ('$cedula', 'docente', '$usuario', '$contraseña')";
                     if ($conn->query($sqlPersona) === TRUE) {
-                        $mensaje = "Docente registrado con éxito. Usuario: $usuario";
+                        alert("Docente registrado con éxito. Usuario: $usuario");
                     } else {
                         $mensaje = "Error al registrar en tabla persona: " . $conn->error;
                     }
@@ -61,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-    } 
+     
     // Código de registro para estudiantes
     // Código de registro para estudiantes
 elseif ($tipoPersona === 'estudiante') {
@@ -123,7 +118,7 @@ elseif ($tipoPersona === 'estudiante') {
             $sqlPersonaEstudiante = "INSERT INTO persona (documento, tipo_persona, usuario, contraseña) 
                                      VALUES ('$tarjetaIdentidad', 'estudiante', '$usuario', '$contraseña')";
             if ($conn->query($sqlPersonaEstudiante) === TRUE) {
-                $mensaje = "Estudiante registrado exitosamente. Usuario: $usuario";
+                alert("Estudiante registrado exitosamente. Usuario: $usuario");
             } else {
                 $mensaje = "Error al registrar en tabla persona: " . $conn->error;
             }
@@ -187,7 +182,123 @@ include("header.php");
 
         }
 
-        
+        function validarFormulario() {
+            const tipoPersona = document.querySelector('input[name="tipo_persona"]:checked');
+            if (!tipoPersona) {
+                alert("Por favor, selecciona un tipo de persona.");
+                return false;
+            }
+
+            // Expresión regular para validar solo letras y espacios
+            const soloLetras = /^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/;
+
+            if (tipoPersona.value === 'docente') {
+                const cedula = document.getElementById('cedula').value.trim();
+                const nombre1 = document.getElementById('doc_nombre1').value.trim();
+                const nombre2 = document.getElementById('doc_nombre2').value.trim();
+                const apellido1 = document.getElementById('doc_apellido1').value.trim();
+                const apellido2 = document.getElementById('doc_apellido2').value.trim();
+                const asignatura = document.getElementById('asignatura').value.trim();
+
+                if (!cedula) {
+                    alert("La cédula es obligatoria.");
+                    return false;
+                }
+                if (!/^[0-9]+$/.test(cedula)) {
+                    alert("La cédula debe contener solo números.");
+                    return false;
+                }
+                if (!nombre1) {
+                    alert("El primer nombre es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(nombre1)) {
+                    alert("El primer nombre solo debe contener letras.");
+                    return false;
+                }
+                if (nombre2 && !soloLetras.test(nombre2)) {
+                    alert("El segundo nombre, si se proporciona, solo debe contener letras.");
+                    return false;
+                }
+                if (!apellido1) {
+                    alert("El primer apellido es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(apellido1)) {
+                    alert("El primer apellido solo debe contener letras.");
+                    return false;
+                }
+                if (!apellido2) {
+                    alert("El segundo apellido es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(apellido2)) {
+                    alert("El segundo apellido solo debe contener letras.");
+                    return false;
+                }
+                if (!asignatura) {
+                    alert("La asignatura es obligatoria.");
+                    return false;
+                }
+                if (!soloLetras.test(asignatura)) {
+                    alert("La asignatura solo debe contener letras.");
+                    return false;
+                }
+            } else if (tipoPersona.value === 'estudiante') {
+                const tarjetaIdentidad = document.getElementById('tarjeta_identidad').value.trim();
+                const nombre1 = document.getElementById('est_nombre1').value.trim();
+                const nombre2 = document.getElementById('est_nombre2').value.trim();
+                const apellido1 = document.getElementById('est_apellido1').value.trim();
+                const apellido2 = document.getElementById('est_apellido2').value.trim();
+                const grado = document.getElementById('grado').value;
+
+                if (!tarjetaIdentidad) {
+                    alert("La tarjeta de identidad es obligatoria.");
+                    return false;
+                }
+                if (!/^[0-9]+$/.test(tarjetaIdentidad)) {
+                    alert("La tarjeta de identidad debe contener solo números.");
+                    return false;
+                }
+                if (!nombre1) {
+                    alert("El primer nombre es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(nombre1)) {
+                    alert("El primer nombre solo debe contener letras.");
+                    return false;
+                }
+                if (nombre2 && !soloLetras.test(nombre2)) {
+                    alert("El segundo nombre, si se proporciona, solo debe contener letras.");
+                    return false;
+                }
+                if (!apellido1) {
+                    alert("El primer apellido es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(apellido1)) {
+                    alert("El primer apellido solo debe contener letras.");
+                    return false;
+                }
+                if (!apellido2) {
+                    alert("El segundo apellido es obligatorio.");
+                    return false;
+                }
+                if (!soloLetras.test(apellido2)) {
+                    alert("El segundo apellido solo debe contener letras.");
+                    return false;
+                }
+                if (!grado) {
+                    alert("Por favor, selecciona un grado.");
+                    return false;
+                }
+            }
+
+            // Si todas las validaciones pasan
+            return true;
+        }
+
+
     </script>
 </head>
 <body>
@@ -196,7 +307,7 @@ include("header.php");
     <div class="button-container">
         <!-- Botón de perfil con solo el icono inicialmente -->
         <button class="toggle-door" onclick="toggleProfile()">
-            <i class="fas fa-user"></i> <span id="userName" style="display: none;"><?php echo $nombre_completo; ?></span>
+            <i class="fas fa-bars"></i><span id="userName" style="display: none;"><?php echo $nombre; ?></span>
         </button>
         <div class="right-buttons">
             <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
@@ -210,8 +321,10 @@ include("header.php");
     <div class="door-content" id="doorContent" style="display: none;">
         <br><br>
         <div class="button-group">
-            <button onclick="showAsignaturas()">Asignaturas</button>
-            <button onclick="window.location.href='perfil.php'">Mi perfil</button>
+            <!--    <button onclick="showAsignaturas()">Asignaturas</button> -->
+            <button onclick="window.location.href='perfil.php'">
+                <i class="fas fa-user"></i>&nbsp;&nbsp;Mi perfil
+            </button>
         </div>
 
         <div class="bottom-buttons">
@@ -229,47 +342,51 @@ include("header.php");
     <!-- Contenedor para el mensaje de bienvenida -->
     <div class="form-container">
         <h1>Registro</h1>
-        <form method="post" action="">
+        <form method="post" action="" onsubmit="return validarFormulario()">
+            <!-- Mensaje de error -->
+            <div id="mensaje" style="color: red; font-weight: bold;">
+                <?php if (!empty($mensaje)) echo $mensaje; ?>
+            </div>
+
+            <!-- Radios para seleccionar el tipo de persona -->
             <div class="radio-options">
-                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()" > Docente</label>
-                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos() "> Estudiante</label>
+                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()"> Docente</label>
+                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos()"> Estudiante</label>
             </div>
 
+            <!-- Campos para docente -->
             <div id="campos_docente" style="display:none;">
-                <h2>Datos del docente</h2>
-                <div class="field-group">
-                    <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
-                    <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1" ></label>
-                    <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
-                    <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1"></label>
-                    <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2"></label>
-                    <label>Asignatura: <input type="text" name="asignatura" id="asignatura"></label>
-                </div>
-            </div>
+            <h2>Datos del docente</h2>
+            <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
+            <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1" ></label>
+            <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
+            <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1" ></label>
+            <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2" ></label>
+            <label>Asignatura: <input type="text" name="asignatura" id="asignatura" ></label>
+        </div>
 
-            <div id="campos_estudiante" style="display:none;">
-                <h2>Datos del estudiante</h2>
-                <div class="field-group">
-                    <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad"></label>
-                    <label>Primer nombre: <input type="text" name="est_nombre1" id="est_nombre1"></label>
-                    <label>Segundo nombre: <input type="text" name="est_nombre2" id="est_nombre2"></label>
-                    <label>Primer apellido: <input type="text" name="est_apellido1" id="est_apellido1"></label>
-                    <label>Segundo apellido: <input type="text" name="est_apellido2" id="est_apellido2"></label>
-                    <label>Grado: 
-                        <select name="grado" id="grado">
-                            <option value="">Selecciona un grado</option>
-                            <option value="primero">Primero</option>
-                            <option value="segundo">Segundo</option>
-                            <option value="tercero">Tercero</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
+        <!-- Campos para estudiante -->
+        <div id="campos_estudiante" style="display:none;">
+            <h2>Datos del estudiante</h2>
+            <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad" ></label>
+            <label>Primer nombre: <input type="text" name="est_nombre1" id="est_nombre1" ></label>
+            <label>Segundo nombre: <input type="text" name="est_nombre2" id="est_nombre2"></label>
+            <label>Primer apellido: <input type="text" name="est_apellido1" id="est_apellido1" ></label>
+            <label>Segundo apellido: <input type="text" name="est_apellido2" id="est_apellido2" ></label>
+            <label>Grado: 
+                <select name="grado" id="grado" >
+                    <option value="">Selecciona un grado</option>
+                    <option value="primero">Primero</option>
+                    <option value="segundo">Segundo</option>
+                    <option value="tercero">Tercero</option>
+                </select>
+            </label>
+        </div>
+
             <br>
             <div class="boton-registrar" style="display: none;" id="botonRegistrar">
                 <button type="submit">Registrar</button>
             </div>
-            
         </form>
     </div>
 </div>
