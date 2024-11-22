@@ -41,15 +41,19 @@ body {
     height: 60px;
     margin-bottom: 10px;
 }
+
 .button-container button {
+    width: 10%;
     padding: 10px 20px;
+    background-color:#0b7f9c ;
+    color: white;
     border: none;
     border-radius: 5px;
-    background-color: #0b7f9c;
-    color: white;
     cursor: pointer;
-    transition: 0.3s; transform: 0.3s;
+    font-size: 16px;
+    outline: none;
 }
+
 
 .toggle-door {
     margin-right: 20px;
@@ -58,13 +62,16 @@ body {
     
 }
 
+.button-container button:hover{
+    
+    background-color: #195463;
+}
+
 .toggle-door i {
     margin-right: 10px; 
 }
 
-.button-container button:hover {
-    background-color: #195463;
-}
+
 
 .door-content {
     display: none;
@@ -135,23 +142,7 @@ body {
     margin-top:100px
 }
 
-.button-container button {
-    width: 10%;
-    padding: auto;
-    background-color:#0b7f9c ;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    outline: none;
-}
 
-.button-container button :hover{
-    background-color: #55d7f8 ;
-   
-    transition: .5s;
-}
 
 .image-container {
     display: flex;
@@ -206,18 +197,28 @@ body {
     color: #333;
 }
 
-.form-container input[type="text"],
-.form-container select {
-    width: 100%;
+.field-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+    column-gap: 20px; /* Espaciado horizontal entre columnas */
+    row-gap: 15px; /* Espaciado vertical entre filas */
+    align-items: center; /* Alineación vertical de los elementos */
+}
+
+.field-group label {
+    display: flex;
+    flex-direction: column; /* Alinear texto e input verticalmente */
+    font-size: 1em;
+    color: #333;
+}
+
+.field-group input[type="text"], select {
+    width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
     padding: 8px;
-    margin-left: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
 }
-
-
-
 /* Opciones de radio */
 .radio-options {
     display: flex;
@@ -226,12 +227,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Alinear campos en columnas */
-.field-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
+
 
 .boton-registrar button{
     background-color: #007bff; /* Azul */
@@ -312,7 +308,7 @@ body {
     margin-bottom: 5px;
   }
   
-  .trabajos-subidos {
+  .configuracion {
     width: calc(33.33% - 10px);
     background-color: #f0f0f0;
     border: 2px solid #ccc;
@@ -320,11 +316,11 @@ body {
     padding: 20px;
   }
   
-  .trabajo {
+  .ajustes {
     margin-bottom: 10px;
   }
   
-  .trabajo i {
+  .ajustes i {
     margin-right: 5px;
   }
   
@@ -410,4 +406,139 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
     transition: all 0.3s ease;
 }
+
+.link-accion {
+    color: inherit; /* Usa el color del texto por defecto */
+    text-decoration: none; /* Elimina el subrayado */
+    font-size: 1em; /* Tamaño de fuente normal */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.link-accion:hover {
+    text-decoration: underline; /* Opcional: subrayar al pasar el mouse */
+    color: #0b7f9c; /* Cambiar color en hover para retroalimentación */
+}
   
+
+/*-------------------------------------------------------------------------CAMBIAR CONTRASEÑA---------------------------------------------------*/
+.form-container2 {
+    
+    max-width: 450px;
+    margin-top: 120px; 
+    margin-left: 32%;
+    padding: 30px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
+}
+
+
+/* Título principal */
+.form-container2 h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2em;
+}
+
+/* Subtítulo */
+.form-container2 h2 {
+    color: #666;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Estilo de los campos de formulario */
+.form-container2 label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
+.field-group2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+    column-gap: 20px; /* Espaciado horizontal entre columnas */
+    row-gap: 15px; /* Espaciado vertical entre filas */
+    align-items: center; /* Alineación vertical de los elementos */
+    
+}
+
+.field-group2 label {
+    display: flex;
+    
+    font-size: 1em;
+    color: #333;
+    justify-content: flex-end;
+}
+
+.field-group2 input[type="password"], select {
+    width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.form-container2 #enviar{
+    background-color: #007bff; /* Azul */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+}
+
+.form-container2 #cancelar{
+    background-color: #ff0000; /* Azul */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    display: flex; /* Para centrar texto e ícono */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaciado entre ícono y texto */
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: all 0.3s ease;
+}
+
+.form-container2 #enviar:hover{
+    background-color: #0056b3; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+.form-container2 #cancelar:hover{
+    background-color: #b30000; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+.form-container2 .message{
+    margin-left: 10%;
+}
+
+.form-container2 .success-message{
+    color: #18ae01;
+}
+
+.form-container2 .error-message{
+    color: #ff0000;
+}
