@@ -81,6 +81,8 @@ if (!empty($_POST)) {
                         <input type="password" name="pass" id="pass" required>
                     </div>
                     <input type="submit" name="enviar" id="enviar" value="Entrar">
+                    <br>
+                    <a href="recuperar_contraseña.php" class="link-accion">¿Olvidó su contraseña?</a>
                 </form>
             </div>
         </div>

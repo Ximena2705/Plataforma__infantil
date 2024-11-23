@@ -62,6 +62,19 @@ body {
     text-align: center;
 }
 
+
+.link-accion {
+    color: inherit; /* Usa el color del texto por defecto */
+    text-decoration: none; /* Elimina el subrayado */
+    font-size: 1em; /* Tamaño de fuente normal */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+.link-accion:hover {
+    text-decoration: underline; /* Opcional: subrayar al pasar el mouse */
+    color: #0b7f9c; /* Cambiar color en hover para retroalimentación */
+}
+
 h2 {
     margin-bottom: 20px;
     color: #333;
@@ -90,48 +103,22 @@ h2 {
 input[type="submit"] {
     width: 100%;
     padding: 10px;
-    background-color: #55d7f8;
+    background-color: #0b7f9c;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     outline: none;
+    margin-bottom: 20px;
 }
 
 input[type="submit"]:hover{
-    background-color: #d56dfa;
+    background-color: #096981;
     transition: .5s;
 }
 
 /*_------------------------------------------------------------------------------------------------------------------------- */
 
-
-.container-registro {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    margin: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.container-registro h2, h3 {
-    color: #333;
-}
-
-.container-registro label {
-    display: block;
-    margin-top: 10px;
-}
-
-.container-registro input[type="text"], input[type="date"], select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
 /*------------------------BIENVENIDO______________*/

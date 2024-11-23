@@ -254,6 +254,19 @@ body {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
     transform: scale(1.05); /* Ampliar ligeramente */
 }
+
+.mensaje-exito {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.mensaje-error {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 /*---------------------------------------------------------------------PERFIL--------------------------------------------------------------------/*
 
 /* Estilos del perfil */
@@ -474,7 +487,7 @@ body {
     justify-content: flex-end;
 }
 
-.field-group2 input[type="password"], select {
+.field-group2 input[type="password"] {
     width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
     padding: 8px;
     border: 1px solid #ccc;
@@ -541,4 +554,70 @@ body {
 
 .form-container2 .error-message{
     color: #ff0000;
+}
+
+/*----------------------------------------------------RECUPERAR CONTRASEÑA----------------------------------------------------------*/
+
+.right-buttons2 {
+    color: white;
+    display: flex;
+    justify-content: center;
+    gap: 50px; 
+    width: 100%; 
+}
+
+
+.button-container2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0b7f9c;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.button-container2 {
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.button-container2 button {
+    width: 10%;
+    padding: 10px 20px;
+    background-color:#0b7f9c ;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+}
+
+.button-container2 button:hover{
+    background-color: #195463;
+}
+
+.toggle-door2 {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    
+}
+
+.toggle-door2 i {
+    margin-right: 10px; 
+}
+
+.field-group2 input[type="text"], input[type="email"] {
+    width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 15px;
 }
