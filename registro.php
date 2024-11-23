@@ -7,6 +7,7 @@ if ($conn->connect_error) {
 }
 
 $mensaje = ''; // Variable para almacenar mensajes
+$mensaje_tipo = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recoger el tipo de persona
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($row['conteo'] > 0) {
             $mensaje = "Este documento ya existe.";
+            $mensaje_tipo = "error"; // Mensaje de error
         }  
         else {
                 // Asignar cédula como usuario y contraseña
@@ -48,11 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    VALUES ('$cedula', 'docente', '$usuario', '$contraseña')";
                     if ($conn->query($sqlPersona) === TRUE) {
                         $mensaje = "Docente registrado con éxito. Usuario: $usuario";
+                        $mensaje_tipo = "exito"; // Mensaje de éxito
                     } else {
                         $mensaje = "Error al registrar en tabla persona: " . $conn->error;
+                        $mensaje_tipo = "error"; // Mensaje de error
                     }
                 } else {
                     $mensaje = "Error al registrar docente: " . $conn->error;
+                    $mensaje_tipo = "error"; // Mensaje de error
                 }
             }
         }
@@ -75,6 +80,7 @@ elseif ($tipoPersona === 'estudiante') {
 
     if ($row['conteo'] > 0) {
         $mensaje = "Este documento ya existe.";
+        $mensaje_tipo = "error"; // Mensaje de error
     } else {
         // Crear usuario base
         $usuarioBase = strtolower(substr($est_nombre1, 0, 2) . "." . $est_apellido1);
@@ -119,15 +125,19 @@ elseif ($tipoPersona === 'estudiante') {
                                      VALUES ('$tarjetaIdentidad', 'estudiante', '$usuario', '$contraseña')";
             if ($conn->query($sqlPersonaEstudiante) === TRUE) {
                 $mensaje = "Estudiante registrado exitosamente. Usuario: $usuario";
+                $mensaje_tipo = "exito"; // Mensaje de éxito
             } else {
                 $mensaje = "Error al registrar en tabla persona: " . $conn->error;
+                $mensaje_tipo = "error"; // Mensaje de error
             }
         } else {
             $mensaje = "Error al registrar estudiante: " . $conn->error;
+            $mensaje_tipo = "error"; // Mensaje de error
         }
     }
 } else {
     $mensaje = "Por favor selecciona un tipo de persona.";
+    $mensaje_tipo = "error"; // Mensaje de error
 }
 
 }
@@ -298,6 +308,12 @@ include("header.php");
             return true;
         }
 
+        function limpiarMensaje() {
+            const mensajeDiv = document.getElementById('mensaje');
+            if (mensajeDiv) {
+                mensajeDiv.innerHTML = ''; // Limpiar el contenido del mensaje
+            }
+        }
 
     </script>
 </head>
@@ -344,43 +360,46 @@ include("header.php");
         <h1>Registro</h1>
         <form method="post" action="" onsubmit="return validarFormulario()">
             <!-- Mensaje de error -->
-            <div id="mensaje" style="color: red; font-weight: bold;">
+            <div id="mensaje" class="<?php echo (!empty($mensaje_tipo) && $mensaje_tipo === 'exito') ? 'mensaje-exito' : 'mensaje-error'; ?>">
                 <?php if (!empty($mensaje)) echo $mensaje; ?>
             </div>
 
             <!-- Radios para seleccionar el tipo de persona -->
             <div class="radio-options">
-                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos()"> Docente</label>
-                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos()"> Estudiante</label>
+                <label><input type="radio" name="tipo_persona" value="docente" onclick="mostrarCampos(); limpiarMensaje()"> Docente</label>
+                <label><input type="radio" name="tipo_persona" value="estudiante" onclick="mostrarCampos(); limpiarMensaje()"> Estudiante</label>
             </div>
 
             <!-- Campos para docente -->
             <div id="campos_docente" style="display:none;">
-            <h2>Datos del docente</h2>
-            <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
-            <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1" ></label>
-            <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
-            <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1" ></label>
-            <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2" ></label>
-            <label>Asignatura: <input type="text" name="asignatura" id="asignatura" ></label>
-        </div>
-
+                <h2>Datos del docente</h2>
+                <div class="field-group">
+                    <label>Cédula: <input type="text" name="cedula" id="cedula"></label>
+                    <label>Primer nombre: <input type="text" name="doc_nombre1" id="doc_nombre1" ></label>
+                    <label>Segundo nombre: <input type="text" name="doc_nombre2" id="doc_nombre2"></label>
+                    <label>Primer apellido: <input type="text" name="doc_apellido1" id="doc_apellido1" ></label>
+                    <label>Segundo apellido: <input type="text" name="doc_apellido2" id="doc_apellido2" ></label>
+                    <label>Asignatura: <input type="text" name="asignatura" id="asignatura" ></label>
+                </div>
+            </div>
         <!-- Campos para estudiante -->
         <div id="campos_estudiante" style="display:none;">
             <h2>Datos del estudiante</h2>
-            <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad" ></label>
-            <label>Primer nombre: <input type="text" name="est_nombre1" id="est_nombre1" ></label>
-            <label>Segundo nombre: <input type="text" name="est_nombre2" id="est_nombre2"></label>
-            <label>Primer apellido: <input type="text" name="est_apellido1" id="est_apellido1" ></label>
-            <label>Segundo apellido: <input type="text" name="est_apellido2" id="est_apellido2" ></label>
-            <label>Grado: 
-                <select name="grado" id="grado" >
-                    <option value="">Selecciona un grado</option>
-                    <option value="primero">Primero</option>
-                    <option value="segundo">Segundo</option>
-                    <option value="tercero">Tercero</option>
-                </select>
-            </label>
+            <div class="field-group">
+                <label>Tarjeta de Identidad: <input type="text" name="tarjeta_identidad" id="tarjeta_identidad" ></label>
+                <label>Primer nombre: <input type="text" name="est_nombre1" id="est_nombre1" ></label>
+                <label>Segundo nombre: <input type="text" name="est_nombre2" id="est_nombre2"></label>
+                <label>Primer apellido: <input type="text" name="est_apellido1" id="est_apellido1" ></label>
+                <label>Segundo apellido: <input type="text" name="est_apellido2" id="est_apellido2" ></label>
+                <label>Grado: 
+                    <select name="grado" id="grado" >
+                        <option value="">Selecciona un grado</option>
+                        <option value="primero">Primero</option>
+                        <option value="segundo">Segundo</option>
+                        <option value="tercero">Tercero</option>
+                    </select>
+                </label>
+            </div>
         </div>
 
             <br>
