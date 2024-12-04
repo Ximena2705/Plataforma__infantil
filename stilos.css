@@ -5,6 +5,7 @@ body {
     padding: 0;
     height: 100vh;
     overflow: hidden;
+    overflow-y: auto; 
 }
 
 .background-image {
@@ -620,4 +621,103 @@ body {
     border-radius: 5px;
     font-size: 1em;
     margin-bottom: 15px;
+}
+
+/*------------------------------------------------------------------ASIGNATURAS-------------------------------------------------------*/
+/* Contenedor de la cuadrícula */
+.grid-container {
+    /*margin-top: 1%;*/
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Tarjetas */
+.card {
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Encabezado de la tarjeta */
+.card-header {
+    height: 20px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+    padding: 15px;
+}
+
+.card-body h3 {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #333;
+}
+
+.card-body p {
+    font-size: 14px;
+    color: #777;
+}
+
+.card-body span {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Estilo del título */
+.titulo-grado {
+
+    margin-top: 7%;
+    font-size: 3rem;
+    color: #0b7f9c;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-align: center;
+  }
+
+  .titulo-grado:hover {
+    transform: scale(1.1);
+    color: #e94e77;
+}
+
+.chispas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Para que no interfiera con otros elementos */
+    z-index: 10;
+}
+
+.chispa {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #f4c542;
+    border-radius: 50%;
+    animation: chispas 1s ease-out forwards;
+}
+
+@keyframes chispas {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
 }

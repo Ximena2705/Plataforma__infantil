@@ -97,10 +97,27 @@ $nombre_completo = $nombre1 . ' ' . $nombre2 . ' ' . $apellido1 . ' ' . $apellid
             <i class="fas fa-bars"></i><span id="userName" style="display: none;"><?php echo $nombre; ?></span>
         </button>
         <div class="right-buttons">
-            <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
-            <h1><button>Primero</button></h1>
-            <h1><button>Segundo</button></h1>
-            <h1><button>Tercero</button></h1>
+        <h1><button onclick="window.location.href='inicio.php'">Inicio</button></h1>
+        <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
+            <h1><button onclick="window.location.href='grados/primero/inicio.php'">Primero</button></h1>
+            <h1><button onclick="window.location.href='grados/segundo/inicio.php'">Segundo</button></h1>
+            <h1><button onclick="window.location.href='grados/tercero/inicio.php'">Tercero</button></h1>
+        <?php endif; ?>
+
+        <?php if ($tipo_persona == 'estudiante'): ?>
+            <?php 
+                // Determinar la página según el grado
+                $paginaGrado = '';
+                if ($grado == 'primero' || $grado == 'Primero') {
+                    $paginaGrado = 'grados/primero/inicio.php';
+                } elseif ($grado == 'segundo' || $grado == 'Segundo') {
+                    $paginaGrado = 'grados/segundo/inicio.php';
+                } elseif ($grado == 'tercero' || $grado == 'Tercero') {
+                    $paginaGrado = 'grados/tercero/inicio.php';
+                }
+            ?>
+            <h1><button onclick="window.location.href='<?php echo $paginaGrado; ?>'">Asignaturas</button></h1>
+        <?php endif; ?>
         </div>
     </div>  
 
