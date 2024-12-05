@@ -45,3 +45,33 @@ document.getElementById("fotoForm").addEventListener("submit", function(event) {
     });
 });
 */
+document.getElementById('editarActividadForm').onsubmit = function(event) {
+    event.preventDefault(); // Evita el envío normal del formulario
+
+    // Captura los valores de los campos
+    var nombreJuego = document.getElementById('nombre_juego').value;
+    var descripcion = document.getElementById('descripcion').value;
+    var url = document.getElementById('url').value;
+    var imagen = document.getElementById('imagen').value;
+
+    // Crea la solicitud AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'actualizar_actividad.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    // Envía los datos al archivo PHP
+    xhr.send('nombre_juego=' + encodeURIComponent(nombreJuego) +
+             '&descripcion=' + encodeURIComponent(descripcion) +
+             '&url=' + encodeURIComponent(url) +
+             '&imagen=' + encodeURIComponent(imagen));
+
+    // Maneja la respuesta
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            alert('Actividad actualizada con éxito');
+            location.reload(); // Recarga la página para reflejar los cambios
+        } else {
+            alert('Hubo un problema al actualizar la actividad');
+        }
+    };
+};
