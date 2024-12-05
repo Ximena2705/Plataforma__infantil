@@ -54,9 +54,9 @@ if ($resultado && $resultado->num_rows > 0) {
         <div class="right-buttons">
         <h1><button onclick="window.location.href='../../inicio.php'">Inicio</button></h1>
         <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
-            <h1><button onclick="window.location.href='grados/primero/inicio.php'">Primero</button></h1>
-            <h1><button onclick="window.location.href='grados/segundo/inicio.php'">Segundo</button></h1>
-            <h1><button onclick="window.location.href='grados/tercero/inicio.php'">Tercero</button></h1>
+            <h1><button onclick="window.location.href='../../grados/primero/inicio.php'">Primero</button></h1>
+            <h1><button onclick="window.location.href='../../grados/segundo/inicio.php'">Segundo</button></h1>
+            <h1><button onclick="window.location.href='../../grados/tercero/inicio.php'">Tercero</button></h1>
         <?php endif; ?>
 
         <?php if ($tipo_persona == 'estudiante'): ?>
@@ -75,7 +75,7 @@ if ($resultado && $resultado->num_rows > 0) {
         <?php endif; ?>
     </div>
     </div>  
-
+    <h3 class="titulo-grado" id="titulo" >Grado: Segundo</h3>  
   <!-- Aquí colocamos la imagen dentro de un contenedor -->
   <div class="grid-container">
         <!-- Tarjeta de ejemplo -->

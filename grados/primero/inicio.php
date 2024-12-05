@@ -54,9 +54,9 @@ if ($resultado && $resultado->num_rows > 0) {
         <div class="right-buttons">
         <h1><button onclick="window.location.href='../../inicio.php'">Inicio</button></h1>
         <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
-            <h1><button onclick="window.location.href='grados/primero/inicio.php'">Primero</button></h1>
-            <h1><button onclick="window.location.href='grados/segundo/inicio.php'">Segundo</button></h1>
-            <h1><button onclick="window.location.href='grados/tercero/inicio.php'">Tercero</button></h1>
+            <h1><button onclick="window.location.href='../../grados/primero/inicio.php'">Primero</button></h1>
+            <h1><button onclick="window.location.href='../../grados/segundo/inicio.php'">Segundo</button></h1>
+            <h1><button onclick="window.location.href='../../grados/tercero/inicio.php'">Tercero</button></h1>
         <?php endif; ?>
 
         <?php if ($tipo_persona == 'estudiante'): ?>
@@ -75,21 +75,25 @@ if ($resultado && $resultado->num_rows > 0) {
         <?php endif; ?>
     </div>
     </div>  
-    <h3 class="titulo-grado" id="titulo" >Grado: Primero</h1>  
-    <div class="chispas" id="chispas"></div>
+    <h3 class="titulo-grado" id="titulo" >Grado: Primero</h3>  
+    
      
   <!-- Aquí colocamos la imagen dentro de un contenedor -->
   <div class="grid-container">
         <!-- Tarjeta de ejemplo -->
-        <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-                <img src="../../imagenes/asignaturas/primero_español.webp" alt="Descripción de la imagen">
-                <h3>ESPAÑOL</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
+        
+            <div class="card">
+                <a href="../primero/español/español.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                    <img src="../../imagenes/asignaturas/primero_español.webp" alt="Descripción de la imagen">
+                    <h3>ESPAÑOL</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+                </a>
             </div>
-        </div>
+
         <div class="card">
             <div class="card-header" ></div>
             <div class="card-body">
@@ -188,6 +192,6 @@ if ($resultado && $resultado->num_rows > 0) {
         alert("Mostrando el perfil completo del usuario...");
     }
 </script>
-<script src="../../script.js" defer></script>  
+
 </body>
 </html>
