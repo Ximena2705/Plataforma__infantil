@@ -213,7 +213,7 @@ body {
     color: #333;
 }
 
-.field-group input[type="text"], select {
+.field-group input[type="text"], select#grado {
     width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
     padding: 8px;
     border: 1px solid #ccc;
@@ -614,7 +614,7 @@ body {
     margin-right: 10px; 
 }
 
-.field-group2 input[type="text"], input[type="email"] {
+.field-group2 input[type="text"], input[type="email"], select#tipo-juego {
     width: 100%; /* Asegura que todos los campos tengan el mismo ancho */
     padding: 8px;
     border: 1px solid #ccc;
@@ -901,3 +901,121 @@ Imagen del juego
 .close-btn:hover {
     background-color: darkred;
 }
+
+/*---------------------------------------------------------------------ACTIVIDAD 1 ------------------------------------------------------*/
+
+/* Estilo general para la barra */
+.top-bar {
+    margin-top: 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f5f5f5; /* Color de fondo */
+   /* border-bottom: 1px solid #ddd;  Línea divisoria */
+}
+
+/* Botón de la izquierda */
+.top-bar .back-button {
+    background-color: #007bff;; /* Color azul */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-bar .back-button i {
+    margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+
+/* Contenedor de los botones de la derecha */
+.top-bar .right-buttons {
+    display: flex;
+    gap: 10px; /* Espacio entre botones */
+    margin-left: 80%;
+}
+
+/* Estilo para los botones de la derecha */
+.top-bar .right-buttons .action-button {
+    background-color: #28a745; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition:  0.3s;
+}
+
+.top-bar .right-buttons .action-button:hover{
+    background-color: #218838; /* Verde oscuro al pasar el ratón */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+.top-bar .back-button:hover{
+    background-color: #1472d6; /* Más oscuro al pasar el mouse */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+    transform: scale(1.05); /* Ampliar ligeramente */
+}
+
+/* Estilo del título */
+.titulo-actividad {
+
+    margin-top: 1%;
+    font-size: 3rem;
+    color: #0b7f9c;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    text-align: center;
+  }
+
+  .titulo-actividad:hover {
+    transform: scale(1.1);
+    color: #0b7f9c;
+}
+
+/*--------------------------------------------------------------CREAR ACTIVIDAD--------------------------------------------------------*/
+
+.form-container3 {
+    
+    max-width: 450px;
+ 
+    margin-left: 32%;
+    padding: 30px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
+}
+
+
+/* Título principal */
+.form-container3 h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2em;
+}
+
+/* Subtítulo */
+.form-container3 h2 {
+    color: #666;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Estilo de los campos de formulario */
+.form-container3 label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+}
+
