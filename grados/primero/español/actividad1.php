@@ -94,8 +94,43 @@ if ($resultado && $resultado->num_rows > 0) {
     </div>
 </div>
 
-    <h3 class="titulo-actividad" id="titulo" >Actividad: </h3> 
+    <h3 class="titulo-actividad" id="titulo" >Actividad: Animales</h3> 
      
+    <div class="container">
+    <!-- ondragstart: específico que debe suceder cuando se arrastra el elemento
+    draggable: indica que el elemento se podrá arrastrar -->
+        <h3>Arrastra donde corresponde </h3>
+        <br>
+        <img src="../../../imagenes/juegos/loro.webp" alt="" draggable="true" ondragstart="drag(event)" id="loro">
+        <img src="../../../imagenes/juegos/gato.webp" alt="" draggable="true" ondragstart="drag(event)" id="gato">
+        <img src="../../../imagenes/juegos/perro.webp" alt="" draggable="true" ondragstart="drag(event)" id="perro">
+    </div>
+    <br>
+    <div class="container">
+        
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Gato</h2>
+        </div>
+
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Perro</h2>
+        </div>
+
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Loro</h2>
+        </div>
+    </div>
+
+    <div class="mensaje2" id="mensaje"></div> <!-- Aquí se mostrará el mensaje global -->
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
 <br><br>
@@ -159,6 +194,7 @@ if ($resultado && $resultado->num_rows > 0) {
 </script>
 <!-- En español.php -->
 <script src="../../../script.js"></script>
+
 
 </body>
 </html>
