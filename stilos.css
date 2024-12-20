@@ -902,7 +902,7 @@ Imagen del juego
     background-color: darkred;
 }
 
-/*---------------------------------------------------------------------ACTIVIDAD 1 ------------------------------------------------------*/
+/*---------------------------------------------------------ACTIVIDAD 1. ARRASTRAR Y SOLTAR------------------------------------------------------*/
 
 /* Estilo general para la barra */
 .top-bar {
@@ -1026,11 +1026,45 @@ Imagen del juego
     cursor: grabbing;
 }
 
-.mensaje2 {
+.mensaje {
     font-size: 20px;
     color: #ff5722;
     font-weight: bold;
     margin-top: 20px;
+    text-align: center;
+}
+
+.botones-juego {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.botones-juego button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.botones-juego button:hover {
+    background-color: #45a049;
+}
+
+.botones-juego button.reset,  .botones-juego button#reiniciar{
+    background-color: #f44336;
+}
+
+.botones-juego button.reset:hover, .botones-juego button#reiniciar:hover {
+    background-color: #e53935;
+}
+
+h3{
+    text-align: center;
 }
 /*--------------------------------------------------------------CREAR ACTIVIDAD--------------------------------------------------------*/
 
@@ -1070,5 +1104,82 @@ Imagen del juego
     color: #333;
 }
 
+/*--------------------------------------------------------ACTIVIDAD 2. SELECCIONAR------------------------------------------------------------*/
+.grid-container2 {
+    display: grid;
+    
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    justify-items: center; /* Centra los elementos dentro de sus áreas */
+   
+    align-items: stretch; /* Estira las filas para que todos los contenedores tengan la misma altura */
+}
 
+.juego-container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    margin-left: 15%;
+}
+
+
+.opciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.opcion {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: #f0f0f0;
+    cursor: pointer;
+    text-align: center;
+    transition:  0.3s border-color 0.3s;
+}
+
+.opcion.seleccionado {
+    background: #d0e8ff;
+    border-color: #007bff;
+}
+
+.opcion.correcto {
+    background: #c3f7d6;
+    border-color: #28a745;
+}
+
+.opcion.incorrecto {
+    background: #f8d7da;
+    border-color: #dc3545;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#resultado {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 41%;
+}
 
