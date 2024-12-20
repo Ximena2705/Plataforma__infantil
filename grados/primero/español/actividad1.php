@@ -86,24 +86,28 @@ if ($resultado && $resultado->num_rows > 0) {
     <button class="back-button" onclick="window.history.back()">
         <i class="fas fa-arrow-left"></i>
     </button>
-
+    <?php if ($tipo_persona != 'estudiante' ): ?>
     <!-- Botones en la parte derecha -->
-    <div class="right-buttons">
-        <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
-        <button class="action-button" onclick="editarActividad()">Editar</button>
-    </div>
+        <div class="right-buttons">
+            <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
+            <button class="action-button" onclick="editarActividad()">Editar</button>
+        </div>
+    <?php endif; ?>
 </div>
 
     <h3 class="titulo-actividad" id="titulo" >Actividad: Animales</h3> 
-     
+    <h3>Arrastra donde corresponde </h3>
     <div class="container">
     <!-- ondragstart: específico que debe suceder cuando se arrastra el elemento
     draggable: indica que el elemento se podrá arrastrar -->
-        <h3>Arrastra donde corresponde </h3>
+        
         <br>
         <img src="../../../imagenes/juegos/loro.webp" alt="" draggable="true" ondragstart="drag(event)" id="loro">
         <img src="../../../imagenes/juegos/gato.webp" alt="" draggable="true" ondragstart="drag(event)" id="gato">
         <img src="../../../imagenes/juegos/perro.webp" alt="" draggable="true" ondragstart="drag(event)" id="perro">
+        <img src="../../../imagenes/juegos/conejo.webp" alt="" draggable="true" ondragstart="drag(event)" id="conejo">
+        <img src="../../../imagenes/juegos/elefante.webp" alt="" draggable="true" ondragstart="drag(event)" id="elefante">
+        <img src="../../../imagenes/juegos/tortuga.webp" alt="" draggable="true" ondragstart="drag(event)" id="tortuga">
     </div>
     <br>
     <div class="container">
@@ -128,9 +132,37 @@ if ($resultado && $resultado->num_rows > 0) {
             <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
             <h2>Loro</h2>
         </div>
+
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Tortuga</h2>
+        </div>
+
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Conejo</h2>
+        </div>
+
+        <div class="figura">
+            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+            ondragover: específico donde se pueden soltar los datos arrastrados -->
+            <div class="box" id="5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <h2>Elefante</h2>
+        </div>
+    </div>
+    
+    <div class="botones-juego">
+        <button onclick="comprobar()">Comprobar</button>
+        <button class="reset" onclick="resetear()">Intentar de nuevo</button>
     </div>
 
-    <div class="mensaje2" id="mensaje"></div> <!-- Aquí se mostrará el mensaje global -->
+    <div class="mensaje" id="mensaje2"></div> <!-- Aquí se mostrará el mensaje global -->
+
+
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
 <br><br>
@@ -189,9 +221,10 @@ if ($resultado && $resultado->num_rows > 0) {
             formulario.style.display = 'none';
         }
     }
+
+    
 </script>
 
-</script>
 <!-- En español.php -->
 <script src="../../../script.js"></script>
 
