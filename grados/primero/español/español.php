@@ -129,12 +129,12 @@ $conn->close();
   <div class="games-container">
         <!-- Aquí irán las tarjetas dinámicas generadas desde PHP -->
         <div class="game-card">
-            <a href="../../primero/español/actividad1.php" style="text-decoration: none; color: inherit;">
+            <!--<a href="../../primero/español/actividad1.php" style="text-decoration: none; color: inherit;">-->
             <img src="../../../imagenes/juegos/foto_juegos.webp" alt="Juego 1">
             <div class="game-info">
                 <h3>Nombre del Juego</h3>
                 <p>Descripción breve del juego.</p>
-                <a href="#" class="play-button">Jugar</a>
+                <a href="../../primero/español/actividad1.php" class="play-button">Jugar</a>
             </div>
             <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
                 <div class="game-actions">
@@ -160,7 +160,7 @@ $conn->close();
             <div class="game-info">
                 <h3>Nombre del Juego</h3>
                 <p>Descripción breve del juego.</p>
-                <a href="#" class="play-button">Jugar</a>
+                <a href="../../primero/español/actividad2.php" class="play-button">Jugar</a>
             </div>
             <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
                 <div class="game-actions">
