@@ -90,78 +90,152 @@ if ($resultado && $resultado->num_rows > 0) {
     <!-- Botones en la parte derecha -->
         <div class="right-buttons">
             <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
-            <button class="action-button" onclick="editarActividad()">Editar</button>
+            <button id="btnEditar" onclick= "mostrarFormulario()">Editar</button>
         </div>
     <?php endif; ?>
 </div>
-
-    <h3 class="titulo-actividad" id="titulo" >Actividad: Animales</h3> 
-    <h3>Arrastra donde corresponde </h3>
-    <div class="container">
-    <!-- ondragstart: específico que debe suceder cuando se arrastra el elemento
-    draggable: indica que el elemento se podrá arrastrar -->
-        
+    <div id="juego1">    
+        <h3 class="titulo-actividad" id="titulo" >Actividad: Animales</h3> 
+        <h3>Arrastra donde corresponde </h3>
+        <div class="container">
+        <!-- ondragstart: específico que debe suceder cuando se arrastra el elemento
+        draggable: indica que el elemento se podrá arrastrar -->
+            
+            <br>
+            <img src="../../../imagenes/juegos/loro.webp" alt="" draggable="true" ondragstart="drag(event)" id="loro">
+            <img src="../../../imagenes/juegos/gato.webp" alt="" draggable="true" ondragstart="drag(event)" id="gato">
+            <img src="../../../imagenes/juegos/perro.webp" alt="" draggable="true" ondragstart="drag(event)" id="perro">
+            <img src="../../../imagenes/juegos/conejo.webp" alt="" draggable="true" ondragstart="drag(event)" id="conejo">
+            <img src="../../../imagenes/juegos/elefante.webp" alt="" draggable="true" ondragstart="drag(event)" id="elefante">
+            <img src="../../../imagenes/juegos/tortuga.webp" alt="" draggable="true" ondragstart="drag(event)" id="tortuga">
+        </div>
         <br>
-        <img src="../../../imagenes/juegos/loro.webp" alt="" draggable="true" ondragstart="drag(event)" id="loro">
-        <img src="../../../imagenes/juegos/gato.webp" alt="" draggable="true" ondragstart="drag(event)" id="gato">
-        <img src="../../../imagenes/juegos/perro.webp" alt="" draggable="true" ondragstart="drag(event)" id="perro">
-        <img src="../../../imagenes/juegos/conejo.webp" alt="" draggable="true" ondragstart="drag(event)" id="conejo">
-        <img src="../../../imagenes/juegos/elefante.webp" alt="" draggable="true" ondragstart="drag(event)" id="elefante">
-        <img src="../../../imagenes/juegos/tortuga.webp" alt="" draggable="true" ondragstart="drag(event)" id="tortuga">
+        <div class="container">
+            
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Gato</h2>
+            </div>
+
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Perro</h2>
+            </div>
+
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Loro</h2>
+            </div>
+
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Tortuga</h2>
+            </div>
+
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Conejo</h2>
+            </div>
+
+            <div class="figura">
+                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
+                ondragover: específico donde se pueden soltar los datos arrastrados -->
+                <div class="box" id="5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Elefante</h2>
+            </div>
+        </div>
+        
+        <div class="botones-juego">
+            <button onclick="comprobar()">Comprobar</button>
+            <button class="reset" onclick="resetear()">Intentar de nuevo</button>
+        </div>
+
+        <div class="mensaje" id="mensaje2"></div> <!-- Aquí se mostrará el mensaje global -->
     </div>
     <br>
-    <div class="container">
-        
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Gato</h2>
+    <br>
+        <div id="form-container3" style="display:none;">
+                <h1>Editar actividad</h1>
+
+                <!-- Formulario -->
+                <form action="" method="POST">
+                    <div class="field-group2">
+                        <label for="tituloJuego">Título del Juego:</label>
+                        <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+                    </div>
+                    <div class="field-group2">
+                        <label for="descripcionJuego">Descripción:</label>
+                        <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+                    </div>
+                    <h3>Imágenes y palabras</h3>
+                    <div id="contenedorEditarElementos">
+                        <!-- Repite este bloque para cada imagen y palabra -->
+                        <div class="fila">
+                            <label for="imagen1">Imagen 1:</label>
+                            <input type="file" id="imagen1" name="imagen1" accept="image/*" required>
+
+                            <label for="palabra1">Nombre de la imagen:</label>
+                            <input type="text" id="palabra1" name="palabra1" placeholder="Escribe la palabra" required>
+                        </div>
+
+                        <div class="fila">
+                            <label for="imagen2">Imagen 2:</label>
+                            <input type="file" id="imagen2" name="imagen2" accept="image/*" required>
+
+                            <label for="palabra2">Nombre de la imagen:</label>
+                            <input type="text" id="palabra2" name="palabra2" placeholder="Escribe la palabra" required>
+                        </div>
+
+                        <div class="fila">
+                            <label for="imagen3">Imagen 3:</label>
+                            <input type="file" id="imagen3" name="imagen3" accept="image/*" required>
+
+                            <label for="palabra3">Nombre de la imagen:</label>
+                            <input type="text" id="palabra3" name="palabra3" placeholder="Escribe la palabra" required>
+                        </div>
+
+                        <div class="fila">
+                            <label for="imagen4">Imagen 4:</label>
+                            <input type="file" id="imagen4" name="imagen4" accept="image/*" required>
+
+                            <label for="palabra4">Nombre de la imagen:</label>
+                            <input type="text" id="palabra4" name="palabra4" placeholder="Escribe la palabra" required>
+                        </div>
+
+                        <div class="fila">
+                            <label for="imagen5">Imagen 5:</label>
+                            <input type="file" id="imagen5" name="imagen5" accept="image/*" required>
+
+                            <label for="palabra5">Nombre de la imagen:</label>
+                            <input type="text" id="palabra5" name="palabra5" placeholder="Escribe la palabra" required>
+                        </div>
+
+                        <div class="fila">
+                            <label for="imagen6">Imagen 6:</label>
+                            <input type="file" id="imagen6" name="imagen6" accept="image/*" required>
+
+                            <label for="palabra6">Nombre de la imagen:</label>
+                            <input type="text" id="palabra6" name="palabra6" placeholder="Escribe la palabra" required>
+                        </div>
+                    </div>
+                    
+                </form>
+                <div>
+                    <button type="submit">Guardar Cambios</button>
+                    <button type="reset">Restablecer</button>
+                </div>
         </div>
-
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Perro</h2>
-        </div>
-
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Loro</h2>
-        </div>
-
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Tortuga</h2>
-        </div>
-
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Conejo</h2>
-        </div>
-
-        <div class="figura">
-            <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-            ondragover: específico donde se pueden soltar los datos arrastrados -->
-            <div class="box" id="5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <h2>Elefante</h2>
-        </div>
-    </div>
-    
-    <div class="botones-juego">
-        <button onclick="comprobar()">Comprobar</button>
-        <button class="reset" onclick="resetear()">Intentar de nuevo</button>
-    </div>
-
-    <div class="mensaje" id="mensaje2"></div> <!-- Aquí se mostrará el mensaje global -->
-
+   
 
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
@@ -213,8 +287,8 @@ if ($resultado && $resultado->num_rows > 0) {
         alert("Mostrando el perfil completo del usuario...");
     }
 
-    function mostrarFormulario(id) {
-        var formulario = document.getElementById('formularioEditar' + id);
+    function mostrarFormulario() {
+        var formulario = document.getElementById('form-container3' );
         if (formulario.style.display === 'none') {
             formulario.style.display = 'block';
         } else {
@@ -222,7 +296,7 @@ if ($resultado && $resultado->num_rows > 0) {
         }
     }
 
-    
+   
 </script>
 
 <!-- En español.php -->

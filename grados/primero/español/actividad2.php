@@ -91,17 +91,18 @@ if ($resultado && $resultado->num_rows > 0) {
     <!-- Botones en la parte derecha -->
         <div class="right-buttons">
             <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
-            <button class="action-button" onclick="editarActividad()">Editar</button>
+            <button id="btnEditar" onclick= "mostrarFormulario()">Editar</button>
         </div>
     <?php endif; ?>
 </div>
-
+<div id="juego2"> 
     <h3 class="titulo-actividad" id="titulo" >Actividad:</h3> 
     <h3>Descripción </h3>
     <div class="grid-container2">
         <div class="juego-container" id="contenedor1">
-            <img src="../../../imagenes/juegos/mamá.webp" alt="" id="imagen-pregunta">
-            <h1>Ma </h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/mamá.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1>Ma </h1><span data-correcto="true"> </span>-->
+            <h1>Ma </h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="false">pa</div>
@@ -111,8 +112,9 @@ if ($resultado && $resultado->num_rows > 0) {
         </div>
 
         <div class="juego-container" id="contenedor2">
-            <img src="../../../imagenes/juegos/papá.webp" alt="" id="imagen-pregunta">
-            <h1>Pa </h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/papá.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1>Pa </h1><span data-correcto="true"> </span>-->
+            <h1>Pa </h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="false">má</div>
@@ -122,8 +124,9 @@ if ($resultado && $resultado->num_rows > 0) {
         </div>
 
         <div class="juego-container" id="contenedor3">
-            <img src="../../../imagenes/juegos/sapo.webp" alt="" id="imagen-pregunta">
-            <h1> Sa </h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/sapo.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1> Sa </h1><span data-correcto="true"> </span>-->
+            <h1> Sa </h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="true">po</div>
@@ -134,8 +137,9 @@ if ($resultado && $resultado->num_rows > 0) {
         </div>
 
         <div class="juego-container" id="contenedor4">
-            <img src="../../../imagenes/juegos/mesa.webp" alt="" id="imagen-pregunta">
-            <h1>Me </h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/mesa.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1>Me </h1><span data-correcto="true"> </span>-->
+            <h1>Me </h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="false">lón</div>
@@ -146,8 +150,9 @@ if ($resultado && $resultado->num_rows > 0) {
         </div>
 
         <div class="juego-container" id="contenedor5">
-            <img src="../../../imagenes/juegos/pato.webp" alt="" id="imagen-pregunta">
-            <h1> Pa</h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/pato.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1> Pa</h1><span data-correcto="true"> </span>-->
+            <h1> Pa</h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="true">to</div>
@@ -157,8 +162,9 @@ if ($resultado && $resultado->num_rows > 0) {
         </div>
 
         <div class="juego-container" id="contenedor6">
-            <img src="../../../imagenes/juegos/rosa.webp" alt="" id="imagen-pregunta">
-            <h1> Ro</h1><span data-correcto="true"> </span>
+            <!--<img src="../../../imagenes/juegos/rosa.webp" alt="" id="imagen-pregunta">-->
+            <!--<h1> Ro</h1><span data-correcto="true"> </span>-->
+            <h1> Ro</h1>
             <br>
             <div class="opciones">
                 <div class="opcion" data-correcto="false">pa</div>
@@ -174,6 +180,62 @@ if ($resultado && $resultado->num_rows > 0) {
     </div>
     <br>
     <p id="resultado"></p>
+    <br>
+    <br>
+</div>
+
+    <div id="form-container4" style="display:none;">
+        <h1>Editar actividad</h1>
+
+                    <!-- Formulario -->
+        <form action="" method="POST">
+        <div class="field-group2">
+            <label for="tituloJuego">Título del Juego:</label>
+            <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+        </div>
+        <div class="field-group2">
+            <label for="descripcionJuego">Descripción:</label>
+            <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+        </div>
+            <h3>Pregunta 1</h3>
+        <div class="field-group2">
+            <label for="descripcionJuego">Pregunta:</label>
+            <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe la pregunta 1:" rows="4" required></input>
+        </div>
+        <div class="field-group2">
+            <label for="descripcionJuego">Respuesta 1:</label>
+            <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
+            <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                <option value="">¿Correcta o falsa?</option>
+                <option value="correcta">Correcta</option>
+                <option value="falsa">Falsa</option>
+            </select>
+        </div>
+        <div class="field-group2">
+            <label for="descripcionJuego">Respuesta 2:</label>
+            <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
+            <select name="tipo-respuesta" id="tipo-respuesta" required >
+                <option value="">¿Correcta o falsa?</option>
+                <option value="correcta">Correcta</option>
+                <option value="falsa">Falsa</option>
+            </select>
+        </div>
+        <div class="field-group2">
+            <label for="descripcionJuego">Respuesta 3:</label>
+            <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
+            <select name="tipo-respuesta" id="tipo-respuesta" required >
+                <option value="">¿Correcta o falsa?</option>
+                <option value="correcta">Correcta</option>
+                <option value="falsa">Falsa</option>
+            </select>
+        </div>
+           
+        </form>
+        <div>
+            <button type="submit">Guardar Cambios</button>
+            <button type="reset">Restablecer</button>
+        </div>
+    </div>
     <br>
     <br>
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
@@ -226,8 +288,8 @@ if ($resultado && $resultado->num_rows > 0) {
         alert("Mostrando el perfil completo del usuario...");
     }
 
-    function mostrarFormulario(id) {
-        var formulario = document.getElementById('formularioEditar' + id);
+    function mostrarFormulario() {
+        var formulario = document.getElementById('form-container4');
         if (formulario.style.display === 'none') {
             formulario.style.display = 'block';
         } else {
