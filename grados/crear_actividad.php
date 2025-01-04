@@ -89,10 +89,10 @@ if ($resultado && $resultado->num_rows > 0) {
 
 </div>
 
-    <div class="form-container3">
+<!--    <div class="form-container3">
         <h1>Crear actividad</h1>
 
-        <!-- Formulario -->
+       
         <form action="" method="POST">
             <div class="field-group2">
                 <label for="name_activity">Nombre de la actividad:</label>
@@ -109,12 +109,12 @@ if ($resultado && $resultado->num_rows > 0) {
                 
             </div>
             
-            <!--<div class="botones-formulario">
+            <div class="botones-formulario">
                 <button id="enviar" type="submit">Crear</button>
                 <button onclick="window.location.href='perfil.php'" id="cancelar" type="button">Regresar</button>
-            </div>-->
+            </div>
         </form>
-    </div>
+    </div>-->
      
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
