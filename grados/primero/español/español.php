@@ -36,7 +36,7 @@ if ($resultado && $resultado->num_rows > 0) {
 ?>
 
 <?php
-
+/*
 // Verificar si se ha subido un archivo
 if ($_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
     $nombreArchivo = $_FILES['imagen']['name'];
@@ -76,8 +76,9 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+*/
 ?>
-?>
+
 
 
 <!DOCTYPE html>
@@ -130,10 +131,10 @@ $conn->close();
         <!-- Aquí irán las tarjetas dinámicas generadas desde PHP -->
         <div class="game-card">
             <!--<a href="../../primero/español/actividad1.php" style="text-decoration: none; color: inherit;">-->
-            <img src="../../../imagenes/juegos/foto_juegos.webp" alt="Juego 1">
+            <img src="../../../imagenes/niño_computador.webp" alt="Juego 1">
             <div class="game-info">
-                <h3>Nombre del Juego</h3>
-                <p>Descripción breve del juego.</p>
+                <h3>Actividad 1</h3>
+                <p>Da clic en 'Jugar' para ir a la actividad.</p>
                 <a href="../../primero/español/actividad1.php" class="play-button">Jugar</a>
             </div>
             <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
@@ -142,10 +143,10 @@ $conn->close();
                     <button class="action-btn view-btn" title="Permitir visualización">
                         👁️
                     </button>
-                    <!-- Botón para editar -->
+                    <!-- Botón para editar 
                     <button onclick="mostrarFormulario(1)" class="action-btn edit-btn" title="Editar">
                         ✏️ Editar
-                    </button>
+                    </button>-->
                     <!-- Botón para eliminar 
                     <button class="action-btn delete-btn" title="Eliminar">
                         ❌ Eliminar
@@ -156,10 +157,10 @@ $conn->close();
         <!-- Repetir estructura para otros juegos -->
 
         <div class="game-card">
-            <img src="../../../imagenes/juegos/foto_juegos.webp" alt="Juego 2">
+            <img src="../../../imagenes/niños.webp" alt="Juego 2">
             <div class="game-info">
-                <h3>Nombre del Juego</h3>
-                <p>Descripción breve del juego.</p>
+                <h3>Actividad 2</h3>
+                <p>Da clic en 'Jugar' para ir a la actividad.</p>
                 <a href="../../primero/español/actividad2.php" class="play-button">Jugar</a>
             </div>
             <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
@@ -168,10 +169,10 @@ $conn->close();
                     <button class="action-btn view-btn" title="Permitir visualización">
                         👁️
                     </button>
-                    <!-- Botón para editar -->
+                    <!-- Botón para editar 
                     <button class="action-btn edit-btn" title="Editar">
                         ✏️ Editar
-                    </button>
+                    </button>-->
                     <!-- Botón para eliminar 
                     <button class="action-btn delete-btn" title="Eliminar">
                         ❌ Eliminar
@@ -181,11 +182,11 @@ $conn->close();
         </div>
 
         <div class="game-card">
-            <img src="../../../imagenes/juegos/foto_juegos.webp" alt="Juego 3">
+            <img src="../../../imagenes/niños_computador.webp" alt="Juego 3">
             <div class="game-info">
-                <h3>Nombre del Juego</h3>
-                <p>Descripción breve del juego.</p>
-                <a href="#" class="play-button">Jugar</a>
+                <h3>Actividad 3</h3>
+                <p>Da clic en 'Jugar' para ir a la actividad.</p>
+                <a href="../../primero/español/actividad3.php" class="play-button">Jugar</a>
             </div>
             <?php if ($tipo_persona == 'admin' || $tipo_persona == 'docente'): ?>
                 <div class="game-actions">
@@ -193,10 +194,10 @@ $conn->close();
                     <button class="action-btn view-btn" title="Permitir visualización">
                         👁️
                     </button>
-                    <!-- Botón para editar -->
+                    <!-- Botón para editar 
                     <button class="action-btn edit-btn" title="Editar">
                         ✏️ Editar
-                    </button>
+                    </button>-->
                     <!-- Botón para eliminar 
                     <button class="action-btn delete-btn" title="Eliminar">
                         ❌ Eliminar
@@ -206,7 +207,7 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Formulario de edición con campo para subir una imagen -->
+    <!-- Formulario de edición con campo para subir una imagen 
 <div id="formularioEditar1" style="display:none;">
     <form id="editarActividadForm" enctype="multipart/form-data">
         <label for="nombre_juego">Nombre del juego:</label>
@@ -218,12 +219,12 @@ $conn->close();
         <label for="imagen">Imagen:</label>
         <input type="file" id="imagen" name="imagen"><br>
 
-        <!-- Campo oculto con la URL predefinida -->
+        Campo oculto con la URL predefinida 
         <input type="hidden" id="url" name="url" value="actividad1.php">
 
         <input type="submit" value="Actualizar">
     </form>
-</div>
+</div>-->
 
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
