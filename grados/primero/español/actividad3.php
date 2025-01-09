@@ -89,8 +89,8 @@ if ($resultado && $resultado->num_rows > 0) {
     <?php if ($tipo_persona != 'estudiante' ): ?>
     <!-- Botones en la parte derecha -->
         <div class="right-buttons">
-            <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
-            <button class="action-button" onclick="editarActividad()">Editar</button>
+            <!--<button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>-->
+            <button id="btnEditar" onclick="mostrarFormulario()">Editar</button>
         </div>
     <?php endif; ?>
 </div>
@@ -128,6 +128,106 @@ if ($resultado && $resultado->num_rows > 0) {
     <div class="mensaje3" id="mensajeActividad"></div> <!-- Aquí se mostrará el mensaje global -->
     </div>
 
+    <div id="form-container4" style="display:none;">
+        <h1>Editar actividad</h1>
+        <!-- Formulario -->
+        <form action="" method="POST">
+            <div class="field-group2">
+                <label for="tituloJuego">Título del Juego:</label>
+                <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+            </div>
+            <div class="field-group2">
+                <label for="descripcionJuego">Descripción:</label>
+                <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+            </div>
+            <br>
+            <!-- Preguntas y respuestas 1-->
+            <div class="field-group2">
+                <label for="descripcionJuego">Tipo 1:</label>
+                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe el tipo 1" rows="4" required></input>
+            </div>
+            <div class="field-group2">
+                <label for="descripcionJuego">Tipo 2:</label>
+                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe el tipo 2" rows="4" required></input>
+            </div>
+            <br>
+            <h3>Palabra 1</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra1" name="palabra1" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+            
+            <br>
+            <h3>Palabra 2</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra2" name="palabra2" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+            
+            <br>
+            <h3>Palabra 3</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra3" name="palabra3" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+
+            <br>
+            <h3>Palabra 4</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra4" name="palabra4" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+
+            <br>
+            <h3>Palabra 5</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra5" name="palabra5" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+
+            <br>
+            <h3>Palabra 6</h3>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra:</label>
+            <input type="text" id="palabra6" name="palabra6" placeholder="Escribe la palabra" required>
+                <select id="tipo-respuesta" name="tipo-respuesta"  required >
+                    <option value="">¿A qué tipo pertenece?</option>
+                    <option value="correcta">Tipo 1</option>
+                    <option value="falsa">Tipo 2</option>
+                </select>
+            </div>
+        </form>
+
+        <div class="botones-formulario">
+             <button id="enviar">Guardar Cambios</button>
+            <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
+        </div>
+    </div>
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
 <br><br>
@@ -178,8 +278,8 @@ if ($resultado && $resultado->num_rows > 0) {
         alert("Mostrando el perfil completo del usuario...");
     }
 
-    function mostrarFormulario(id) {
-        var formulario = document.getElementById('formularioEditar' + id);
+    function mostrarFormulario() {
+        var formulario = document.getElementById('form-container4');
         if (formulario.style.display === 'none') {
             formulario.style.display = 'block';
         } else {
@@ -187,6 +287,14 @@ if ($resultado && $resultado->num_rows > 0) {
         }
     }
 
+    function noMostrarFormulario() {
+        var formulario = document.getElementById('form-container4' );
+        if (formulario.style.display === 'block') {
+            formulario.style.display = 'none';
+        } else {
+            formulario.style.display = 'block';
+        }
+    }
     
 </script>
 

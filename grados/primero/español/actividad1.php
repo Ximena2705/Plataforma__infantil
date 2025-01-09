@@ -89,7 +89,7 @@ if ($resultado && $resultado->num_rows > 0) {
     <?php if ($tipo_persona != 'estudiante' ): ?>
     <!-- Botones en la parte derecha -->
         <div class="right-buttons">
-            <button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>
+            <!--<button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>-->
             <button id="btnEditar" onclick= "mostrarFormulario()">Editar</button>
         </div>
     <?php endif; ?>
@@ -230,9 +230,9 @@ if ($resultado && $resultado->num_rows > 0) {
                     </div>
                     
                 </form>
-                <div>
-                    <button type="submit">Guardar Cambios</button>
-                    <button type="reset">Restablecer</button>
+                <div class="botones-formulario">
+                    <button id="enviar">Guardar Cambios</button>
+                    <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
                 </div>
         </div>
    
@@ -293,6 +293,15 @@ if ($resultado && $resultado->num_rows > 0) {
             formulario.style.display = 'block';
         } else {
             formulario.style.display = 'none';
+        }
+    }
+
+    function noMostrarFormulario() {
+        var formulario = document.getElementById('form-container3' );
+        if (formulario.style.display === 'block') {
+            formulario.style.display = 'none';
+        } else {
+            formulario.style.display = 'block';
         }
     }
 

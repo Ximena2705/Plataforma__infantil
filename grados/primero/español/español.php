@@ -141,7 +141,10 @@ $conn->close();
                 <div class="game-actions">
                     <!-- Botón para visualizar -->
                     <button class="action-btn view-btn" title="Permitir visualización">
-                        👁️
+                        <i class="fa-solid fa-eye"></i> Mostrar
+                    </button>
+                    <button class="action-btn view-btn" title="No permitir visualización">
+                        <i class="fa-solid fa-eye-slash"></i> Ocultar
                     </button>
                     <!-- Botón para editar 
                     <button onclick="mostrarFormulario(1)" class="action-btn edit-btn" title="Editar">
@@ -167,7 +170,10 @@ $conn->close();
                 <div class="game-actions">
                     <!-- Botón para visualizar -->
                     <button class="action-btn view-btn" title="Permitir visualización">
-                        👁️
+                        <i class="fa-solid fa-eye"></i> Mostrar
+                    </button>
+                    <button class="action-btn view-btn" title="No permitir visualización">
+                        <i class="fa-solid fa-eye-slash"></i> Ocultar
                     </button>
                     <!-- Botón para editar 
                     <button class="action-btn edit-btn" title="Editar">
@@ -192,7 +198,10 @@ $conn->close();
                 <div class="game-actions">
                     <!-- Botón para visualizar -->
                     <button class="action-btn view-btn" title="Permitir visualización">
-                        👁️
+                        <i class="fa-solid fa-eye"></i> Mostrar
+                    </button>
+                    <button class="action-btn view-btn" title="No permitir visualización">
+                        <i class="fa-solid fa-eye-slash"></i> Ocultar
                     </button>
                     <!-- Botón para editar 
                     <button class="action-btn edit-btn" title="Editar">
@@ -284,6 +293,8 @@ $conn->close();
             formulario.style.display = 'none';
         }
     }
+
+
 </script>
 
 </script>
