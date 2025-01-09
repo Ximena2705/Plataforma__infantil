@@ -81,64 +81,73 @@ if ($resultado && $resultado->num_rows > 0) {
   <!-- Aquí colocamos la imagen dentro de un contenedor -->
   <div class="grid-container">
         <!-- Tarjeta de ejemplo -->
-        
-            <div class="card">
-                <a href="../primero/español/español.php" style="text-decoration: none; color: inherit;">
+        <div class="card">
+            <a href="../primero/español/español.php" style="text-decoration: none; color: inherit;">
                 <div class="card-header" ></div>
                 <div class="card-body">
                     <img src="../../imagenes/asignaturas/primero_español.webp" alt="Descripción de la imagen">
                     <h3>ESPAÑOL</h3>
                     <p>GRADO: PRIMERO</p>
-                <!-- <span>3% completado</span>-->
+                    <!-- <span>3% completado</span>-->
                 </div>
-                </a>
-            </div>
+            </a>
+        </div>
 
         <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-                <img src="../../imagenes/asignaturas/primero_mate.webp" alt="Descripción de la imagen">
-                <h3>MATEMÁTICAS</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
-            </div>
+            <a href="../primero/matematicas/matematicas.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                    <img src="../../imagenes/asignaturas/primero_mate.webp" alt="Descripción de la imagen">
+                    <h3>MATEMÁTICAS</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+            </a>
         </div>
         <!-- Agrega más tarjetas aquí -->
         <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-            <img src="../../imagenes/asignaturas/primero_ingles.webp" alt="Descripción de la imagen">    
-            <h3>INGLÉS</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
-            </div>
+            <a href="../primero/matematicas/matematicas.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                <img src="../../imagenes/asignaturas/primero_ingles.webp" alt="Descripción de la imagen">    
+                <h3>INGLÉS</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+            </a>
         </div>
         <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-            <img src="../../imagenes/asignaturas/primero_naturales.webp" alt="Descripción de la imagen">
-                <h3>CIENCIAS NATURALES</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
-            </div>
+            <a href="../primero/matematicas/matematicas.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                <img src="../../imagenes/asignaturas/primero_naturales.webp" alt="Descripción de la imagen">
+                    <h3>CIENCIAS NATURALES</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+            </a>
         </div>
         <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-            <img src="../../imagenes/asignaturas/primero_sociales.webp" alt="Descripción de la imagen">
-                <h3>CIENCIAS SOCIALES</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
-            </div>
+            <a href="../primero/matematicas/matematicas.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                <img src="../../imagenes/asignaturas/primero_sociales.webp" alt="Descripción de la imagen">
+                    <h3>CIENCIAS SOCIALES</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+            </a>
         </div>
         <div class="card">
-            <div class="card-header" ></div>
-            <div class="card-body">
-            <img src="../../imagenes/asignaturas/primero_info.webp" alt="Descripción de la imagen">
-                <h3>INFORMATICA</h3>
-                <p>GRADO: PRIMERO</p>
-               <!-- <span>3% completado</span>-->
-            </div>
+            <a href="../primero/matematicas/matematicas.php" style="text-decoration: none; color: inherit;">
+                <div class="card-header" ></div>
+                <div class="card-body">
+                <img src="../../imagenes/asignaturas/primero_info.webp" alt="Descripción de la imagen">
+                    <h3>INFORMATICA</h3>
+                    <p>GRADO: PRIMERO</p>
+                <!-- <span>3% completado</span>-->
+                </div>
+            </a>
         </div>
     </div>
 
