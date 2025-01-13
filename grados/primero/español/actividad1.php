@@ -1,6 +1,7 @@
 <?php
 
 include('../../../header.php');
+include('../../../conexion.php');
 
 if (!isset($_SESSION['documento'])) {
     header("Location: ../../../login.php");
@@ -21,6 +22,9 @@ $grado = '';
     if ($tipo_persona == 'estudiante') {
     $sql = "SELECT  grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
 }
+else {
+    $resultado = null; // O maneja el caso según corresponda
+}
 
 $resultado = $conn->query($sql);
 
@@ -32,9 +36,81 @@ if ($resultado && $resultado->num_rows > 0) {
     }
 }
 
+// Procesar el formulario
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Recibir los datos del formulario
+    $titulo = $_POST['titulo'];
+    $descripcion = $_POST['descripcion'];
+    $palabra1 = $_POST['palabra1'];
+    $palabra2 = $_POST['palabra2'];
+    $palabra3 = $_POST['palabra3'];
+    $palabra4 = $_POST['palabra4'];
+    $palabra5 = $_POST['palabra5'];
+    $palabra6 = $_POST['palabra6'];
+
+    // Manejo de imágenes
+    $ruta_imagenes = "../../../imagenes/juegos/";
+    $imagenes = [];
+    for ($i = 1; $i <= 6; $i++) {
+        $nombreImagen = "imagen" . $i;
+        if (!empty($_FILES[$nombreImagen]['name'])) {
+            $ruta = $ruta_imagenes . basename($_FILES[$nombreImagen]['name']);
+            if (move_uploaded_file($_FILES[$nombreImagen]['tmp_name'], $ruta)) {
+                $imagenes[$i] = $ruta;
+            } else {
+                $imagenes[$i] = null; // En caso de que no se pueda mover el archivo
+                $error_message = "Error al subir la imagen $i.";
+            }
+        } else {
+            $imagenes[$i] = null; // Si no se sube una imagen, dejamos como NULL
+        }
+    }
+
+    // Si hay algún error en las imágenes, no procesamos la actualización
+    if ($error_message == "") {
+        // Construir la consulta de actualización
+        $sql = "UPDATE juego1 
+                SET titulo = ?, descripcion = ?, 
+                    imagen1 = ?, imagen2 = ?, imagen3 = ?, 
+                    imagen4 = ?, imagen5 = ?, imagen6 = ?, 
+                    palabra1 = ?, palabra2 = ?, palabra3 = ?, 
+                    palabra4 = ?, palabra5 = ?, palabra6 = ? 
+                WHERE id = 'juego1_esp1'";
+
+        $stmt = $conn->prepare($sql);
+
+        // Asegúrate de que las imágenes sean NULL si no fueron cargadas
+        $stmt->bind_param(
+            "ssssssssssssss",
+            $titulo,
+            $descripcion,
+            $imagenes[1] ?? null,
+            $imagenes[2] ?? null,
+            $imagenes[3] ?? null,
+            $imagenes[4] ?? null,
+            $imagenes[5] ?? null,
+            $imagenes[6] ?? null,
+            $palabra1,
+            $palabra2,
+            $palabra3,
+            $palabra4,
+            $palabra5,
+            $palabra6
+        );
+
+        // Ejecutar la consulta
+        if ($stmt->execute()) {
+            $error_message = "Juego actualizado correctamente.";
+        } else {
+            $error_message = "Error al actualizar el juego: " . $stmt->error;
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
+}
 
 ?>
-
 
 
 <!DOCTYPE html>
@@ -168,21 +244,22 @@ if ($resultado && $resultado->num_rows > 0) {
                 <h1>Editar actividad</h1>
 
                 <!-- Formulario -->
-                <form action="" method="POST">
+                <form action="actividad1.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="idJuego" value="juego1_esp1"> <!-- ID del juego a editar -->
                     <div class="field-group2">
-                        <label for="tituloJuego">Título del Juego:</label>
-                        <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+                        <label for="titulo">Título del Juego:</label>
+                        <input type="text" id="titulo" name="titulo" placeholder="Título del juego" required>
                     </div>
                     <div class="field-group2">
-                        <label for="descripcionJuego">Descripción:</label>
-                        <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+                        <label for="descripcion">Descripción:</label>
+                        <textarea id="descripcion" name="descripcion" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
                     </div>
                     <h3>Imágenes y palabras</h3>
                     <div id="contenedorEditarElementos">
                         <!-- Repite este bloque para cada imagen y palabra -->
                         <div class="fila">
                             <label for="imagen1">Imagen 1:</label>
-                            <input type="file" id="imagen1" name="imagen1" accept="image/*" required>
+                            <input type="file" id="imagen1" name="imagen1" required>
 
                             <label for="palabra1">Nombre de la imagen:</label>
                             <input type="text" id="palabra1" name="palabra1" placeholder="Escribe la palabra" required>
@@ -190,7 +267,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
                         <div class="fila">
                             <label for="imagen2">Imagen 2:</label>
-                            <input type="file" id="imagen2" name="imagen2" accept="image/*" required>
+                            <input type="file" id="imagen2" name="imagen2" required>
 
                             <label for="palabra2">Nombre de la imagen:</label>
                             <input type="text" id="palabra2" name="palabra2" placeholder="Escribe la palabra" required>
@@ -198,7 +275,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
                         <div class="fila">
                             <label for="imagen3">Imagen 3:</label>
-                            <input type="file" id="imagen3" name="imagen3" accept="image/*" required>
+                            <input type="file" id="imagen3" name="imagen3" required>
 
                             <label for="palabra3">Nombre de la imagen:</label>
                             <input type="text" id="palabra3" name="palabra3" placeholder="Escribe la palabra" required>
@@ -206,7 +283,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
                         <div class="fila">
                             <label for="imagen4">Imagen 4:</label>
-                            <input type="file" id="imagen4" name="imagen4" accept="image/*" required>
+                            <input type="file" id="imagen4" name="imagen4" required>
 
                             <label for="palabra4">Nombre de la imagen:</label>
                             <input type="text" id="palabra4" name="palabra4" placeholder="Escribe la palabra" required>
@@ -214,7 +291,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
                         <div class="fila">
                             <label for="imagen5">Imagen 5:</label>
-                            <input type="file" id="imagen5" name="imagen5" accept="image/*" required>
+                            <input type="file" id="imagen5" name="imagen5" required>
 
                             <label for="palabra5">Nombre de la imagen:</label>
                             <input type="text" id="palabra5" name="palabra5" placeholder="Escribe la palabra" required>
@@ -222,7 +299,7 @@ if ($resultado && $resultado->num_rows > 0) {
 
                         <div class="fila">
                             <label for="imagen6">Imagen 6:</label>
-                            <input type="file" id="imagen6" name="imagen6" accept="image/*" required>
+                            <input type="file" id="imagen6" name="imagen6" required>
 
                             <label for="palabra6">Nombre de la imagen:</label>
                             <input type="text" id="palabra6" name="palabra6" placeholder="Escribe la palabra" required>
@@ -231,7 +308,7 @@ if ($resultado && $resultado->num_rows > 0) {
                     
                 </form>
                 <div class="botones-formulario">
-                    <button id="enviar">Guardar Cambios</button>
+                    <button type="submit" id="enviar">Guardar Cambios</button>
                     <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
                 </div>
         </div>
