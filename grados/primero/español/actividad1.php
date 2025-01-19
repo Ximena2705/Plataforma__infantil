@@ -38,76 +38,126 @@ if ($resultado && $resultado->num_rows > 0) {
 
 // Procesar el formulario
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibir los datos del formulario
-    $titulo = $_POST['titulo'];
-    $descripcion = $_POST['descripcion'];
-    $palabra1 = $_POST['palabra1'];
-    $palabra2 = $_POST['palabra2'];
-    $palabra3 = $_POST['palabra3'];
-    $palabra4 = $_POST['palabra4'];
-    $palabra5 = $_POST['palabra5'];
-    $palabra6 = $_POST['palabra6'];
-
-    // Manejo de imágenes
-    $ruta_imagenes = "../../../imagenes/juegos/";
+    $titulo = $_POST['titulo'] ?? '';
+    $descripcion = $_POST['descripcion'] ?? '';
     $imagenes = [];
+    $palabras = [];
+    $nombre_imagenes = [];
+    $rutaImagenes = "../../../imagenes/juegos/";
+
+    // Recolectar las imágenes y nombres de las imágenes
     for ($i = 1; $i <= 6; $i++) {
-        $nombreImagen = "imagen" . $i;
-        if (!empty($_FILES[$nombreImagen]['name'])) {
-            $ruta = $ruta_imagenes . basename($_FILES[$nombreImagen]['name']);
-            if (move_uploaded_file($_FILES[$nombreImagen]['tmp_name'], $ruta)) {
-                $imagenes[$i] = $ruta;
+        $nombreCampo = "imagen" . $i; // Nombre del input file (imagen1, imagen2, ...)
+        if (isset($_FILES[$nombreCampo]) && $_FILES[$nombreCampo]['error'] === UPLOAD_ERR_OK) {
+            // Obtener el nombre temporal y el nombre final del archivo
+            $nombreArchivo = time() . "_" . $_FILES[$nombreCampo]['name'];
+            $rutaArchivo = $rutaImagenes . $nombreArchivo;
+
+            // Verificar si ya existe el archivo en la carpeta
+            if (file_exists($rutaArchivo)) {
+                echo "El archivo $nombreArchivo ya existe. Será sobrescrito.<br>";
             } else {
-                $imagenes[$i] = null; // En caso de que no se pueda mover el archivo
-                $error_message = "Error al subir la imagen $i.";
+                echo "El archivo $nombreArchivo será guardado por primera vez.<br>";
             }
+
+            // Mover el archivo al directorio, sobrescribiéndolo si ya existe
+            if (move_uploaded_file($_FILES[$nombreCampo]['tmp_name'], $rutaArchivo)) {
+                echo "Imagen $i guardada correctamente.<br>";
+            } else {
+                echo "Error al guardar la imagen $i.<br>";
+            }
+
+            // Asignar la ruta al campo correspondiente
+            ${"imagen" . $i} = $rutaArchivo;
+            // Recolectar el nombre de las imágenes para las palabras
+            $palabras[] = $_POST["nombre_imagen" . $i] ?? '';
         } else {
-            $imagenes[$i] = null; // Si no se sube una imagen, dejamos como NULL
+            // Si no se seleccionó una imagen para este campo
+            ${"imagen" . $i} = null;
+            echo "No se seleccionó una imagen $i.<br>";
         }
     }
 
-    // Si hay algún error en las imágenes, no procesamos la actualización
-    if ($error_message == "") {
-        // Construir la consulta de actualización
-        $sql = "UPDATE juego1 
-                SET titulo = ?, descripcion = ?, 
-                    imagen1 = ?, imagen2 = ?, imagen3 = ?, 
-                    imagen4 = ?, imagen5 = ?, imagen6 = ?, 
-                    palabra1 = ?, palabra2 = ?, palabra3 = ?, 
-                    palabra4 = ?, palabra5 = ?, palabra6 = ? 
-                WHERE id = 'juego1_esp1'";
+    // Mezclar las palabras de manera aleatoria
+    shuffle($palabras);
 
-        $stmt = $conn->prepare($sql);
+    // Asignar las palabras aleatorias a las variables correspondientes
+    $palabra1 = $palabras[0] ?? '';
+    $palabra2 = $palabras[1] ?? '';
+    $palabra3 = $palabras[2] ?? '';
+    $palabra4 = $palabras[3] ?? '';
+    $palabra5 = $palabras[4] ?? '';
+    $palabra6 = $palabras[5] ?? '';
 
-        // Asegúrate de que las imágenes sean NULL si no fueron cargadas
-        $stmt->bind_param(
-            "ssssssssssssss",
-            $titulo,
-            $descripcion,
-            $imagenes[1] ?? null,
-            $imagenes[2] ?? null,
-            $imagenes[3] ?? null,
-            $imagenes[4] ?? null,
-            $imagenes[5] ?? null,
-            $imagenes[6] ?? null,
-            $palabra1,
-            $palabra2,
-            $palabra3,
-            $palabra4,
-            $palabra5,
-            $palabra6
-        );
+    $id = $_POST['id'] ?? '';
 
-        // Ejecutar la consulta
-        if ($stmt->execute()) {
-            $error_message = "Juego actualizado correctamente.";
-        } else {
-            $error_message = "Error al actualizar el juego: " . $stmt->error;
-        }
+    // Consulta SQL
+$sql = "UPDATE juego1 SET 
+titulo = ?, 
+descripcion = ?, 
+imagen1 = ?, 
+imagen2 = ?, 
+imagen3 = ?, 
+imagen4 = ?, 
+imagen5 = ?, 
+imagen6 = ?, 
+nombre_imagen1 = ?, 
+nombre_imagen2 = ?, 
+nombre_imagen3 = ?, 
+nombre_imagen4 = ?, 
+nombre_imagen5 = ?, 
+nombre_imagen6 = ?, 
+palabra1 = ?, 
+palabra2 = ?, 
+palabra3 = ?, 
+palabra4 = ?, 
+palabra5 = ?, 
+palabra6 = ? 
+WHERE id = ?";
 
-        $stmt->close();
-        $conn->close();
-    }
+// Preparar la consulta
+$stmt = $conn->prepare($sql);
+
+// Verificar que la preparación fue exitosa
+if (!$stmt) {
+die("Error al preparar la consulta: " . $conn->error);
+}
+
+// Asociar los parámetros a la consulta
+$stmt->bind_param(
+"ssssssssssssssssssss", // 18 valores para actualizar + 1 para el id
+$titulo,
+$descripcion,
+$imagen1,
+$imagen2,
+$imagen3,
+$imagen4,
+$imagen5,
+$imagen6,
+$nombre_imagen1,
+$nombre_imagen2,
+$nombre_imagen3,
+$nombre_imagen4,
+$nombre_imagen5,
+$nombre_imagen6,
+$palabra1,
+$palabra2,
+$palabra3,
+$palabra4,
+$palabra5,
+$palabra6,
+$id // Este valor es el identificador de la fila (p. ej., "juego1_esp1")
+);
+
+// Ejecutar la consulta
+if ($stmt->execute()) {
+echo "Datos actualizados correctamente.";
+} else {
+echo "Error al actualizar los datos: " . $stmt->error;
+}
+
+// Cerrar la consulta
+$stmt->close();
 }
 
 ?>
@@ -178,12 +228,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         draggable: indica que el elemento se podrá arrastrar -->
             
             <br>
-            <img src="../../../imagenes/juegos/loro.webp" alt="" draggable="true" ondragstart="drag(event)" id="loro">
-            <img src="../../../imagenes/juegos/gato.webp" alt="" draggable="true" ondragstart="drag(event)" id="gato">
-            <img src="../../../imagenes/juegos/perro.webp" alt="" draggable="true" ondragstart="drag(event)" id="perro">
-            <img src="../../../imagenes/juegos/conejo.webp" alt="" draggable="true" ondragstart="drag(event)" id="conejo">
-            <img src="../../../imagenes/juegos/elefante.webp" alt="" draggable="true" ondragstart="drag(event)" id="elefante">
-            <img src="../../../imagenes/juegos/tortuga.webp" alt="" draggable="true" ondragstart="drag(event)" id="tortuga">
+            <img src="<?php echo $datos['../.../../imagen1']; ?>" alt="Imagen 1">
+            <img src="<?php echo $datos['../.../../imagen2']; ?>" alt="Imagen 2">
+            <img src="<?php echo $datos['../.../../imagen3']; ?>" alt="Imagen 3">
+            <img src="<?php echo $datos['../.../../imagen4']; ?>" alt="Imagen 4">
+            <img src="<?php echo $datos['../.../../imagen5']; ?>" alt="Imagen 5">
+            <img src="<?php echo $datos['../.../../imagen6']; ?>" alt="Imagen 6">
         </div>
         <br>
         <div class="container">
@@ -244,8 +294,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h1>Editar actividad</h1>
 
                 <!-- Formulario -->
-                <form action="actividad1.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="idJuego" value="juego1_esp1"> <!-- ID del juego a editar -->
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="juego1_esp1">
+
                     <div class="field-group2">
                         <label for="titulo">Título del Juego:</label>
                         <input type="text" id="titulo" name="titulo" placeholder="Título del juego" required>
@@ -255,62 +306,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <textarea id="descripcion" name="descripcion" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
                     </div>
                     <h3>Imágenes y palabras</h3>
-                    <div id="contenedorEditarElementos">
-                        <!-- Repite este bloque para cada imagen y palabra -->
-                        <div class="fila">
-                            <label for="imagen1">Imagen 1:</label>
-                            <input type="file" id="imagen1" name="imagen1" required>
-
-                            <label for="palabra1">Nombre de la imagen:</label>
-                            <input type="text" id="palabra1" name="palabra1" placeholder="Escribe la palabra" required>
+                    <?php for ($i = 1; $i <= 6; $i++): ?>
+                        <div class="field-group2">
+                            <label for="imagen<?php echo $i; ?>">Imagen <?php echo $i; ?>:</label>
+                            <input type="file" id="imagen<?php echo $i; ?>" name="imagen<?php echo $i; ?>">
+                            <label for="nombre_imagen<?php echo $i; ?>">Nombre de la imagen:</label>
+                            <input type="text" id="nombre_imagen<?php echo $i; ?>" name="nombre_imagen<?php echo $i; ?>" placeholder="Escribe el nombre de la imagen">
+                            <br>
                         </div>
+                <?php endfor; ?>
 
-                        <div class="fila">
-                            <label for="imagen2">Imagen 2:</label>
-                            <input type="file" id="imagen2" name="imagen2" required>
-
-                            <label for="palabra2">Nombre de la imagen:</label>
-                            <input type="text" id="palabra2" name="palabra2" placeholder="Escribe la palabra" required>
-                        </div>
-
-                        <div class="fila">
-                            <label for="imagen3">Imagen 3:</label>
-                            <input type="file" id="imagen3" name="imagen3" required>
-
-                            <label for="palabra3">Nombre de la imagen:</label>
-                            <input type="text" id="palabra3" name="palabra3" placeholder="Escribe la palabra" required>
-                        </div>
-
-                        <div class="fila">
-                            <label for="imagen4">Imagen 4:</label>
-                            <input type="file" id="imagen4" name="imagen4" required>
-
-                            <label for="palabra4">Nombre de la imagen:</label>
-                            <input type="text" id="palabra4" name="palabra4" placeholder="Escribe la palabra" required>
-                        </div>
-
-                        <div class="fila">
-                            <label for="imagen5">Imagen 5:</label>
-                            <input type="file" id="imagen5" name="imagen5" required>
-
-                            <label for="palabra5">Nombre de la imagen:</label>
-                            <input type="text" id="palabra5" name="palabra5" placeholder="Escribe la palabra" required>
-                        </div>
-
-                        <div class="fila">
-                            <label for="imagen6">Imagen 6:</label>
-                            <input type="file" id="imagen6" name="imagen6" required>
-
-                            <label for="palabra6">Nombre de la imagen:</label>
-                            <input type="text" id="palabra6" name="palabra6" placeholder="Escribe la palabra" required>
-                        </div>
-                    </div>
-                    
-                </form>
                 <div class="botones-formulario">
                     <button type="submit" id="enviar">Guardar Cambios</button>
                     <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
-                </div>
+                </div>    
+                </form>
+                
         </div>
    
 
