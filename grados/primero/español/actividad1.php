@@ -13,16 +13,12 @@ $documento = $_SESSION['documento'];
 $tipo_persona = $_SESSION['tipo_persona'];
 
 // Inicializar las variables para los nombres, grado y asignatura
-
 $grado = '';
 
-
 // Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
-
-    if ($tipo_persona == 'estudiante') {
-    $sql = "SELECT  grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
-}
-else {
+if ($tipo_persona == 'estudiante') {
+    $sql = "SELECT grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
+} else {
     $resultado = null; // O maneja el caso según corresponda
 }
 
@@ -40,127 +36,101 @@ if ($resultado && $resultado->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = $_POST['titulo'] ?? '';
     $descripcion = $_POST['descripcion'] ?? '';
-    $imagenes = [];
-    $palabras = [];
-    $nombre_imagenes = [];
-    $rutaImagenes = "../../../imagenes/juegos/";
-
-    // Recolectar las imágenes y nombres de las imágenes
-    for ($i = 1; $i <= 6; $i++) {
-        $nombreCampo = "imagen" . $i; // Nombre del input file (imagen1, imagen2, ...)
-        if (isset($_FILES[$nombreCampo]) && $_FILES[$nombreCampo]['error'] === UPLOAD_ERR_OK) {
-            // Obtener el nombre temporal y el nombre final del archivo
-            $nombreArchivo = time() . "_" . $_FILES[$nombreCampo]['name'];
-            $rutaArchivo = $rutaImagenes . $nombreArchivo;
-
-            // Verificar si ya existe el archivo en la carpeta
-            if (file_exists($rutaArchivo)) {
-                echo "El archivo $nombreArchivo ya existe. Será sobrescrito.<br>";
-            } else {
-                echo "El archivo $nombreArchivo será guardado por primera vez.<br>";
-            }
-
-            // Mover el archivo al directorio, sobrescribiéndolo si ya existe
-            if (move_uploaded_file($_FILES[$nombreCampo]['tmp_name'], $rutaArchivo)) {
-                echo "Imagen $i guardada correctamente.<br>";
-            } else {
-                echo "Error al guardar la imagen $i.<br>";
-            }
-
-            // Asignar la ruta al campo correspondiente
-            ${"imagen" . $i} = $rutaArchivo;
-            // Recolectar el nombre de las imágenes para las palabras
-            $palabras[] = $_POST["nombre_imagen" . $i] ?? '';
-        } else {
-            // Si no se seleccionó una imagen para este campo
-            ${"imagen" . $i} = null;
-            echo "No se seleccionó una imagen $i.<br>";
-        }
-    }
-
-    // Mezclar las palabras de manera aleatoria
-    shuffle($palabras);
-
-    // Asignar las palabras aleatorias a las variables correspondientes
-    $palabra1 = $palabras[0] ?? '';
-    $palabra2 = $palabras[1] ?? '';
-    $palabra3 = $palabras[2] ?? '';
-    $palabra4 = $palabras[3] ?? '';
-    $palabra5 = $palabras[4] ?? '';
-    $palabra6 = $palabras[5] ?? '';
-
     $id = $_POST['id'] ?? '';
 
-    // Consulta SQL
-$sql = "UPDATE juego1 SET 
-titulo = ?, 
-descripcion = ?, 
-imagen1 = ?, 
-imagen2 = ?, 
-imagen3 = ?, 
-imagen4 = ?, 
-imagen5 = ?, 
-imagen6 = ?, 
-nombre_imagen1 = ?, 
-nombre_imagen2 = ?, 
-nombre_imagen3 = ?, 
-nombre_imagen4 = ?, 
-nombre_imagen5 = ?, 
-nombre_imagen6 = ?, 
-palabra1 = ?, 
-palabra2 = ?, 
-palabra3 = ?, 
-palabra4 = ?, 
-palabra5 = ?, 
-palabra6 = ? 
-WHERE id = ?";
+    $rutaImagenes = "../../../imagenes/juegos/";
 
-// Preparar la consulta
-$stmt = $conn->prepare($sql);
+    // Inicializar arrays
+    $imagenes = [];
+    $nombres_imagenes = [];
+    $palabras = [];
 
-// Verificar que la preparación fue exitosa
-if (!$stmt) {
-die("Error al preparar la consulta: " . $conn->error);
+    // Recorrer las imágenes
+    for ($i = 1; $i <= 6; $i++) {
+        $nombreCampo = "imagen" . $i;
+        $nombreImagenCampo = "nombre_imagen" . $i;
+
+        $nombreImagen = $_POST[$nombreImagenCampo] ?? '';
+        $nombreArchivo = null;
+
+        if (isset($_FILES[$nombreCampo]) && $_FILES[$nombreCampo]['error'] === UPLOAD_ERR_OK) {
+            $nombreArchivo = time() . "_" . basename($_FILES[$nombreCampo]['name']);
+            $rutaArchivo = $rutaImagenes . $nombreArchivo;
+
+            if (move_uploaded_file($_FILES[$nombreCampo]['tmp_name'], $rutaArchivo)) {
+                echo "Imagen $i guardada correctamente.<br>";
+                $imagenes[] = $rutaArchivo; // Guardar ruta de imagen
+            } else {
+                echo "Error al guardar la imagen $i.<br>";
+                $imagenes[] = ''; // Imagen vacía en caso de error
+            }
+        } else {
+            $imagenes[] = ''; // Si no se subió imagen, mantener vacío
+        }
+
+        $nombres_imagenes[] = $nombreImagen;
+        $palabras[] = $nombreImagen; // Nombre de la imagen = palabra
+    }
+
+    // Mezclar las palabras
+    shuffle($palabras);
+
+    // SQL para actualizar la tabla
+    $sql = "UPDATE juego1 SET 
+        titulo = ?, 
+        descripcion = ?, 
+        imagen1 = ?, imagen2 = ?, imagen3 = ?, 
+        imagen4 = ?, imagen5 = ?, imagen6 = ?, 
+        palabra1 = ?, palabra2 = ?, palabra3 = ?, 
+        palabra4 = ?, palabra5 = ?, palabra6 = ?,
+        nombre_imagen1 = ?, nombre_imagen2 = ?, nombre_imagen3 = ?, 
+        nombre_imagen4 = ?, nombre_imagen5 = ?, nombre_imagen6 = ? 
+        WHERE id = ?";
+
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . $conn->error);
+    }
+
+    // Definir valores seguros para evitar errores de referencia
+    $titulo = $titulo ?? '';
+    $descripcion = $descripcion ?? '';
+    $id = $id ?? '';
+
+    for ($i = 0; $i < 6; $i++) {
+        $imagenes[$i] = $imagenes[$i] ?? '';
+        $nombres_imagenes[$i] = $nombres_imagenes[$i] ?? '';
+        $palabras[$i] = $palabras[$i] ?? '';
+    }
+
+    // Asociar los parámetros correctamente
+    $stmt->bind_param('sssssssssssssssssssss', 
+        $titulo, $descripcion,
+        $imagenes[0], $imagenes[1], $imagenes[2], 
+        $imagenes[3], $imagenes[4], $imagenes[5], 
+        $nombres_imagenes[0], $nombres_imagenes[1], $nombres_imagenes[2], 
+        $nombres_imagenes[3], $nombres_imagenes[4], $nombres_imagenes[5], 
+        $palabras[0], $palabras[1], $palabras[2], 
+        $palabras[3], $palabras[4], $palabras[5],
+        $id
+    );
+
+    // Ejecutar la consulta
+    if ($stmt->execute()) {
+        echo "Datos actualizados correctamente.";
+    } else {
+        echo "Error al actualizar los datos: " . $stmt->error;
+    }
+
+    // Cerrar la consulta y conexión
+    $stmt->close();
+    $conn->close();
 }
-
-// Asociar los parámetros a la consulta
-$stmt->bind_param(
-"ssssssssssssssssssss", // 18 valores para actualizar + 1 para el id
-$titulo,
-$descripcion,
-$imagen1,
-$imagen2,
-$imagen3,
-$imagen4,
-$imagen5,
-$imagen6,
-$nombre_imagen1,
-$nombre_imagen2,
-$nombre_imagen3,
-$nombre_imagen4,
-$nombre_imagen5,
-$nombre_imagen6,
-$palabra1,
-$palabra2,
-$palabra3,
-$palabra4,
-$palabra5,
-$palabra6,
-$id // Este valor es el identificador de la fila (p. ej., "juego1_esp1")
-);
-
-// Ejecutar la consulta
-if ($stmt->execute()) {
-echo "Datos actualizados correctamente.";
-} else {
-echo "Error al actualizar los datos: " . $stmt->error;
-}
-
-// Cerrar la consulta
-$stmt->close();
-}
-
 ?>
+
+
+
 
 
 <!DOCTYPE html>
@@ -228,12 +198,12 @@ $stmt->close();
         draggable: indica que el elemento se podrá arrastrar -->
             
             <br>
-            <img src="<?php echo $datos['../.../../imagen1']; ?>" alt="Imagen 1">
-            <img src="<?php echo $datos['../.../../imagen2']; ?>" alt="Imagen 2">
-            <img src="<?php echo $datos['../.../../imagen3']; ?>" alt="Imagen 3">
-            <img src="<?php echo $datos['../.../../imagen4']; ?>" alt="Imagen 4">
-            <img src="<?php echo $datos['../.../../imagen5']; ?>" alt="Imagen 5">
-            <img src="<?php echo $datos['../.../../imagen6']; ?>" alt="Imagen 6">
+            <img src="<?php echo $imagenes[0]; ?>" alt="Imagen 1">
+            <img src="<?php echo $imagenes[1]; ?>" alt="Imagen 2">
+            <img src="<?php echo $imagenes[2]; ?>" alt="Imagen 3">
+            <img src="<?php echo $imagenes[3]; ?>" alt="Imagen 4">
+            <img src="<?php echo $imagenes[4]; ?>" alt="Imagen 5">
+            <img src="<?php echo $imagenes[5]; ?>" alt="Imagen 6">
         </div>
         <br>
         <div class="container">
@@ -314,8 +284,8 @@ $stmt->close();
                             <input type="text" id="nombre_imagen<?php echo $i; ?>" name="nombre_imagen<?php echo $i; ?>" placeholder="Escribe el nombre de la imagen">
                             <br>
                         </div>
-                <?php endfor; ?>
-
+                    <?php endfor; ?>
+                    <!--<img id="preview<?php echo $i; ?>" src="#" alt="Vista previa" style="display: none; max-width: 100px;">-->
                 <div class="botones-formulario">
                     <button type="submit" id="enviar">Guardar Cambios</button>
                     <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
