@@ -1,83 +1,4 @@
-/*
-document.getElementById('tipo_persona').addEventListener('change', function() {
-    var tipoPersona = this.value;
-    if (tipoPersona === 'docente') {
-        document.getElementById('campos_docente').style.display = 'block';
-        document.getElementById('campos_estudiante').style.display = 'none';
-    } else if (tipoPersona === 'estudiante') {
-        document.getElementById('campos_docente').style.display = 'none';
-        document.getElementById('campos_estudiante').style.display = 'block';
-    }
-});
 
-document.getElementById("subirFotoBtn").addEventListener("click", function() {
-    const subirFotoBtn = document.getElementById('subirFotoBtn');
-    const fotoForm = document.getElementById('fotoForm');
-    
-    // Mostrar el formulario y ocultar el botón principal
-    subirFotoBtn.style.display = 'none';
-    fotoForm.style.display = 'block';
-});
-
-document.getElementById("fotoForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evitar recargar la página
-
-    let formData = new FormData(this); // Crear el FormData con los datos del formulario
-    fetch("subir_foto.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json()) // Convertir la respuesta a JSON
-    .then(data => {
-        alert(data.message); // Mostrar el mensaje al usuario
-
-        if (data.status === "success") {
-            // Actualizar la imagen de perfil si la subida fue exitosa
-            document.querySelector('.foto-perfil img').src = 'imagenes/usuarios/' + document.getElementById('documentoUsuario').value + ".webp";
-        }
-
-        // Resetear el formulario y volver al estado inicial
-        this.reset();
-        document.getElementById('subirFotoBtn').style.display = 'block';
-        document.getElementById('fotoForm').style.display = 'none';
-    })
-    .catch(error => {
-        alert("Ocurrió un error al subir la foto.");
-    });
-});
-
-document.getElementById('editarActividadForm').onsubmit = function(event) {
-    event.preventDefault(); // Evita el envío normal del formulario
-
-    // Captura los valores de los campos
-    var nombreJuego = document.getElementById('nombre_juego').value;
-    var descripcion = document.getElementById('descripcion').value;
-    var url = document.getElementById('url').value;
-    var imagen = document.getElementById('imagen').value;
-
-    // Crea la solicitud AJAX
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'actualizar_actividad.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    // Envía los datos al archivo PHP
-    xhr.send('nombre_juego=' + encodeURIComponent(nombreJuego) +
-             '&descripcion=' + encodeURIComponent(descripcion) +
-             '&url=' + encodeURIComponent(url) +
-             '&imagen=' + encodeURIComponent(imagen));
-
-    // Maneja la respuesta
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            alert('Actividad actualizada con éxito');
-            location.reload(); // Recarga la página para reflejar los cambios
-        } else {
-            alert('Hubo un problema al actualizar la actividad');
-        }
-    };
-};
-*/
-//-----------------------------------------------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     // Detecta qué juego está cargado
     const juego1 = document.getElementById('juego1');
@@ -87,95 +8,122 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lógica para Juego 1
     if (juego1) {
         console.log('Cargando Juego 1');
-        // Aquí va el código JavaScript específico para Juego 1
+        const contenedor = document.querySelector(".container");
+        contenedor.innerHTML = ""; 
+        for (let i = 0; i < nombresImagenes.length; i++) {
+            const img = document.createElement("img");
+            img.src = nombresImagenes[i];  
+            img.id = "img" + i;  
+            img.alt = "Imagen " + (i + 1);
+        
+            // ✅ Asignar el nombre correcto basado en `palabrasCorrectas`
+            img.setAttribute('data-nombre', nombresImagenes[i].split('/').pop().split('.')[0]);
 
-
+            
+            img.draggable = true;
+            img.ondragstart = drag;
+        
+            contenedor.appendChild(img);
+        
+            console.log(`Imagen ID: img${i}, Nombre Asignado: ${img.getAttribute("data-nombre")}`);
+        }
         window.arreglo = ["", "", "", "", "", ""]; // Arreglo inicial para las posiciones
+
+        // Variables globales con valores de PHP
+        
+        
 
         function allowDrop(ev) {
             ev.preventDefault();
         }
-
+        
         function drag(ev) {
             ev.dataTransfer.setData("text", ev.target.id);
         }
-
+        
         function drop(ev) {
             ev.preventDefault();
-            const data = ev.dataTransfer.getData("text");
-            const targetId = ev.target.id;
-
-            // Si la caja está vacía, coloca la imagen
-            if (arreglo[parseInt(targetId)] === "") {
-                arreglo[parseInt(targetId)] = data;
-                ev.target.appendChild(document.getElementById(data));
+            const data = ev.dataTransfer.getData("text"); // ID de la imagen arrastrada
+            const targetId = ev.target.id; // ID del contenedor donde se suelta
+        
+            if (window.arreglo[parseInt(targetId)] === "") {
+                const img = document.getElementById(data); // Imagen movida
+                const nombreImagen = img.getAttribute("data-nombre"); // Obtener su nombre correcto
+        
+                window.arreglo[parseInt(targetId)] = { id: data, nombre: nombreImagen }; // Guardar ambos en el arreglo
+                ev.target.appendChild(img);
+        
+                console.log("Estado actual del arreglo:", window.arreglo); // 🔍 Verificar estructura
             }
         }
 
+        
         function comprobar() {
             const mensaje = document.getElementById("mensaje2");
-            if (arreglo[0] === "gato" && arreglo[1] === "perro" && arreglo[2] === "loro" 
-                && arreglo[3] === "tortuga" && arreglo[4] === "conejo" && arreglo[5] === "elefante") {
-                mensaje.style.color = "green";
-                mensaje.innerHTML = "¡Muy bien! Has colocado todas las imágenes correctamente.";
-            } else {
-                mensaje.style.color = "#ff5722";
-                mensaje.innerHTML = "¡Intenta de nuevo! Las imágenes no están en el lugar correcto.";
+            let esCorrecto = true;
+        
+            for (let i = 0; i < window.arreglo.length; i++) {
+                const elemento = window.arreglo[i]; // Ahora es un objeto { id, nombre }
+                
+                if (elemento) {
+                    const nombreImagen = elemento.nombre.toLowerCase(); // Obtener nombre desde el objeto
+                    const palabraCorrecta = palabrasCorrectas[i].toLowerCase(); // Palabra esperada
+                    
+                    console.log(`Posición: ${i}, Imagen: ${nombreImagen}, Palabra Correcta: ${palabraCorrecta}`);
+        
+                    if (nombreImagen !== palabraCorrecta) {
+                        esCorrecto = false;
+                        break;
+                    }
+                }
             }
+        
+            mensaje.style.color = esCorrecto ? "green" : "#ff5722";
+            mensaje.innerHTML = esCorrecto
+                ? "¡Muy bien! Has colocado todas las imágenes correctamente."
+                : "¡Intenta de nuevo! Las imágenes no están en el lugar correcto.";
+        
+            console.log(window.arreglo);
+            console.log(palabrasCorrectas);
         }
 
         function resetear() {
-            // Reiniciar el arreglo
             window.arreglo = ["", "", "", "", "", ""];
 
-            // Vaciar todas las cajas
             const cajas = document.querySelectorAll(".box");
-            cajas.forEach(caja => caja.innerHTML = ""); // Vaciar el contenido de las cajas
-
-            // Eliminar las imágenes actuales
-            const imagenes = document.querySelectorAll(".container img");
-            imagenes.forEach(img => img.remove());
-
-            // Crear las imágenes nuevamente
-            const contenedor = document.querySelector(".container");  // Obtener el contenedor donde se encuentran las imágenes
-            
-            // Lista de imágenes iniciales
-            const imagenesRestauradas = [
-                { src: "../../../imagenes/juegos/loro.webp", id: "loro", alt: "Loro" },
-                { src: "../../../imagenes/juegos/gato.webp", id: "gato", alt: "Gato" },
-                { src: "../../../imagenes/juegos/perro.webp", id: "perro", alt: "Perro" },
-                { src: "../../../imagenes/juegos/conejo.webp", id: "conejo", alt: "Conejo" },
-                { src: "../../../imagenes/juegos/elefante.webp", id: "elefante", alt: "Elefante" },
-                { src: "../../../imagenes/juegos/tortuga.webp", id: "tortuga", alt: "Tortuga" }
-            ];
-
-            // Crear las imágenes y añadirlas al contenedor
-            imagenesRestauradas.forEach(imgData => {
+            cajas.forEach(caja => caja.innerHTML = "");
+        
+            const contenedor = document.querySelector(".container");
+            contenedor.innerHTML = ""; 
+        
+            // Asegurar que las imágenes se agreguen en el mismo orden
+            for (let i = 0; i < nombresImagenes.length; i++) {
                 const img = document.createElement("img");
-                img.src = imgData.src;
-                img.id = imgData.id;
-                img.alt = imgData.alt;
+                img.src = nombresImagenes[i];  // Asignar la imagen correcta
+                img.id = "img" + i;  // Darle un ID único
+                img.alt = "Imagen " + (i + 1);
+                
+                // ✅ Asegurar que el nombre correcto se asigna
+                img.setAttribute('data-nombre', nombresImagenes[i].split('/').pop().split('.')[0]); 
+                
                 img.draggable = true;
-                img.ondragstart = drag; // Asignar el evento de drag
-
-                contenedor.appendChild(img); // Añadir la imagen al contenedor
-            });
-
-            // Limpiar el mensaje de éxito o error
-            const mensaje = document.getElementById("mensaje2");
-            if (mensaje) {
-                mensaje.innerHTML = ""; // Limpiar el mensaje
-            } else {
-                console.error("No se encontró el elemento con id 'mensaje2'.");
+                img.ondragstart = drag;
+        
+                contenedor.appendChild(img);
+        
+                // Verificar en consola
+                console.log(`Imagen ID: img${i}, Nombre Asignado: ${img.getAttribute("data-nombre")}`);
             }
+        
+            document.getElementById("mensaje2").innerHTML = "";
         }
 
-        // Asignar las funciones globalmente
         window.allowDrop = allowDrop;
         window.drag = drag;
         window.drop = drop;
         window.comprobar = comprobar;
         window.resetear = resetear;
+        
     }
     
 
