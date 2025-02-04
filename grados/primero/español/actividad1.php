@@ -1,5 +1,4 @@
 <?php
-
 include('../../../header.php');
 include('../../../conexion.php');
 
@@ -8,126 +7,128 @@ if (!isset($_SESSION['documento'])) {
     exit();
 }
 
-// Obtener el documento y tipo de persona de la sesión
 $documento = $_SESSION['documento'];
 $tipo_persona = $_SESSION['tipo_persona'];
-
-// Inicializar las variables para los nombres, grado y asignatura
 $grado = '';
 
-// Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
 if ($tipo_persona == 'estudiante') {
-    $sql = "SELECT grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
-} else {
-    $resultado = null; // O maneja el caso según corresponda
-}
+    $sql = "SELECT grado FROM estudiante WHERE tarjeta_identidad = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $documento);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
-$resultado = $conn->query($sql);
-
-if ($resultado && $resultado->num_rows > 0) {
-    $row = $resultado->fetch_assoc();
-
-    if ($tipo_persona == 'estudiante') {
+    if ($resultado && $resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
         $grado = $row['grado'];
     }
+    $stmt->close();
 }
 
-// Procesar el formulario
+// ID del juego (ajústalo si es necesario)
+$id = "juego1_esp1";
+
+// **Inicializar variables**
+$titulo = "";
+$descripcion = "";
+$imagenes = array_fill(0, 6, '');
+$palabras = array_fill(0, 6, '');
+
+// **Si se envió el formulario, guardar los datos**
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titulo = $_POST['titulo'] ?? '';
     $descripcion = $_POST['descripcion'] ?? '';
-    $id = $_POST['id'] ?? '';
 
     $rutaImagenes = "../../../imagenes/juegos/";
-
-    // Inicializar arrays
-    $imagenes = [];
     $nombres_imagenes = [];
-    $palabras = [];
 
-    // Recorrer las imágenes
     for ($i = 1; $i <= 6; $i++) {
         $nombreCampo = "imagen" . $i;
         $nombreImagenCampo = "nombre_imagen" . $i;
 
         $nombreImagen = $_POST[$nombreImagenCampo] ?? '';
-        $nombreArchivo = null;
+        $nombreImagen = strtolower(trim($nombreImagen)); // Minúsculas y sin espacios
+        $nombreArchivo = $nombreImagen ? $nombreImagen . ".png" : null; // Asigna nombre solo si existe
 
         if (isset($_FILES[$nombreCampo]) && $_FILES[$nombreCampo]['error'] === UPLOAD_ERR_OK) {
-            $nombreArchivo = time() . "_" . basename($_FILES[$nombreCampo]['name']);
             $rutaArchivo = $rutaImagenes . $nombreArchivo;
 
             if (move_uploaded_file($_FILES[$nombreCampo]['tmp_name'], $rutaArchivo)) {
-                echo "Imagen $i guardada correctamente.<br>";
-                $imagenes[] = $rutaArchivo; // Guardar ruta de imagen
-            } else {
-                echo "Error al guardar la imagen $i.<br>";
-                $imagenes[] = ''; // Imagen vacía en caso de error
+                $imagenes[$i - 1] = $rutaArchivo;
             }
-        } else {
-            $imagenes[] = ''; // Si no se subió imagen, mantener vacío
         }
 
-        $nombres_imagenes[] = $nombreImagen;
-        $palabras[] = $nombreImagen; // Nombre de la imagen = palabra
+        $nombres_imagenes[$i - 1] = $nombreImagen;
+        $palabras[$i - 1] = $nombreImagen;
     }
 
-    // Mezclar las palabras
-    shuffle($palabras);
+    shuffle($palabras); // Mezclar palabras antes de guardar
 
-    // SQL para actualizar la tabla
     $sql = "UPDATE juego1 SET 
         titulo = ?, 
         descripcion = ?, 
         imagen1 = ?, imagen2 = ?, imagen3 = ?, 
         imagen4 = ?, imagen5 = ?, imagen6 = ?, 
         palabra1 = ?, palabra2 = ?, palabra3 = ?, 
-        palabra4 = ?, palabra5 = ?, palabra6 = ?,
+        palabra4 = ?, palabra5 = ?, palabra6 = ?, 
         nombre_imagen1 = ?, nombre_imagen2 = ?, nombre_imagen3 = ?, 
         nombre_imagen4 = ?, nombre_imagen5 = ?, nombre_imagen6 = ? 
         WHERE id = ?";
 
     $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param('sssssssssssssssssssss', 
+            $titulo, $descripcion,
+            $imagenes[0], $imagenes[1], $imagenes[2], 
+            $imagenes[3], $imagenes[4], $imagenes[5], 
+            $palabras[0], $palabras[1], $palabras[2], 
+            $palabras[3], $palabras[4], $palabras[5], 
+            $nombres_imagenes[0], $nombres_imagenes[1], $nombres_imagenes[2], 
+            $nombres_imagenes[3], $nombres_imagenes[4], $nombres_imagenes[5], 
+            $id
+        );
+        $stmt->execute();
+        $stmt->close();
 
-    if (!$stmt) {
-        die("Error al preparar la consulta: " . $conn->error);
+        var_dump($imagenes); // Ver los nombres exactos de los archivos
     }
-
-    // Definir valores seguros para evitar errores de referencia
-    $titulo = $titulo ?? '';
-    $descripcion = $descripcion ?? '';
-    $id = $id ?? '';
-
-    for ($i = 0; $i < 6; $i++) {
-        $imagenes[$i] = $imagenes[$i] ?? '';
-        $nombres_imagenes[$i] = $nombres_imagenes[$i] ?? '';
-        $palabras[$i] = $palabras[$i] ?? '';
-    }
-
-    // Asociar los parámetros correctamente
-    $stmt->bind_param('sssssssssssssssssssss', 
-        $titulo, $descripcion,
-        $imagenes[0], $imagenes[1], $imagenes[2], 
-        $imagenes[3], $imagenes[4], $imagenes[5], 
-        $nombres_imagenes[0], $nombres_imagenes[1], $nombres_imagenes[2], 
-        $nombres_imagenes[3], $nombres_imagenes[4], $nombres_imagenes[5], 
-        $palabras[0], $palabras[1], $palabras[2], 
-        $palabras[3], $palabras[4], $palabras[5],
-        $id
-    );
-
-    // Ejecutar la consulta
-    if ($stmt->execute()) {
-        echo "Datos actualizados correctamente.";
-    } else {
-        echo "Error al actualizar los datos: " . $stmt->error;
-    }
-
-    // Cerrar la consulta y conexión
-    $stmt->close();
-    $conn->close();
 }
+
+// **Recuperar datos almacenados en la base de datos**
+$sql = "SELECT * FROM juego1 WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $id);
+$stmt->execute();
+$resultado = $stmt->get_result();
+
+if ($resultado->num_rows > 0) {
+    $row = $resultado->fetch_assoc();
+    $titulo = $row['titulo'];
+    $descripcion = $row['descripcion'];
+
+    for ($i = 1; $i <= 6; $i++) {
+        $imagenes[$i - 1] = $row["imagen$i"] ?? '';
+        $palabras[$i - 1] = $row["palabra$i"] ?? '';
+    }
+
+    // Asegúrate de que ya tienes las variables $imagenes y $palabras definidas en PHP
+    $imagenesJuego = array_map(function($imagen) {
+        return [
+            'src' => $imagen, // Ruta de la imagen
+            'id' => basename($imagen, ".png"), // ID basado en el nombre del archivo sin la extensión
+            'alt' => basename($imagen, ".png") // Texto alternativo basado en el nombre del archivo
+        ];
+    }, $imagenes);
+
+    $palabrasCorrectas = $palabras; // Las palabras ya están mezcladas en $palabras
+    $nombresImagenes = array_map(function($nombre) {
+        return strtolower(trim($nombre)); // Nombre de la imagen en minúsculas
+    }, $palabras);
+}
+$stmt->close();
+$conn->close();
 ?>
+
 
 
 
@@ -174,82 +175,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h1><button onclick="window.location.href='<?php echo $paginaGrado; ?>'">Asignaturas</button></h1>
         <?php endif; ?>
     </div>
-    </div>  
+</div>  
       
   <!-- Aquí colocamos la imagen dentro de un contenedor -->
-  <div class="top-bar">
-    <!-- Botón en la parte izquierda -->
-    <button class="back-button" onclick="window.history.back()">
-        <i class="fas fa-arrow-left"></i>
-    </button>
-    <?php if ($tipo_persona != 'estudiante' ): ?>
-    <!-- Botones en la parte derecha -->
-        <div class="right-buttons">
-            <!--<button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>-->
-            <button id="btnEditar" onclick= "mostrarFormulario()">Editar</button>
-        </div>
-    <?php endif; ?>
-</div>
+    <div class="top-bar">
+    
+        <button class="back-button" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <?php if ($tipo_persona != 'estudiante' ): ?>
+        <!-- Botones en la parte derecha -->
+            <div class="right-buttons">
+                <!--<button class="action-button" onclick="window.location.href='../../crear_actividad.php'">Crear actividad</button>-->
+                <button id="btnEditar" onclick= "mostrarFormulario()">Editar</button>
+            </div>
+        <?php endif; ?>
+    </div>
+
     <div id="juego1">    
-        <h3 class="titulo-actividad" id="titulo" >Actividad: Animales</h3> 
-        <h3>Arrastra donde corresponde </h3>
+        <h3 class="titulo-actividad" id="titulo"><?php echo htmlspecialchars($titulo); ?></h3> 
+        <h3><?php echo htmlspecialchars($descripcion); ?></h3>
         <div class="container">
-        <!-- ondragstart: específico que debe suceder cuando se arrastra el elemento
-        draggable: indica que el elemento se podrá arrastrar -->
-            
-            <br>
-            <img src="<?php echo $imagenes[0]; ?>" alt="Imagen 1">
-            <img src="<?php echo $imagenes[1]; ?>" alt="Imagen 2">
-            <img src="<?php echo $imagenes[2]; ?>" alt="Imagen 3">
-            <img src="<?php echo $imagenes[3]; ?>" alt="Imagen 4">
-            <img src="<?php echo $imagenes[4]; ?>" alt="Imagen 5">
-            <img src="<?php echo $imagenes[5]; ?>" alt="Imagen 6">
+            <?php for ($i = 0; $i < 6; $i++): ?>
+                <?php if (!empty($imagenes[$i])): ?>
+                    <img src="<?php echo htmlspecialchars($imagenes[$i]); ?>" 
+                    id="img<?php echo $i; ?>" 
+                    draggable="true" 
+                    ondragstart="drag(event)" 
+                    data-nombre="<?php echo htmlspecialchars($palabras[$i]); ?>" 
+                    alt="Imagen <?php echo $i + 1; ?>">
+                <?php endif; ?>
+            <?php endfor; ?>
         </div>
-        <br>
+
+        <br>    
         <div class="container">
-            
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Gato</h2>
-            </div>
-
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Perro</h2>
-            </div>
-
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Loro</h2>
-            </div>
-
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Tortuga</h2>
-            </div>
-
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Conejo</h2>
-            </div>
-
-            <div class="figura">
-                <!-- ondrop: específico que sucede cuando se suelta un elemento arrastrado
-                ondragover: específico donde se pueden soltar los datos arrastrados -->
-                <div class="box" id="5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <h2>Elefante</h2>
-            </div>
+            <?php for ($i = 0; $i < 6; $i++): ?>
+                <div class="figura">
+                    <div class="box" id="<?php echo $i; ?>" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <h2><?php echo htmlspecialchars($palabras[$i]); ?></h2>
+                </div>
+            <?php endfor; ?>
         </div>
+
         
         <div class="botones-juego">
             <button onclick="comprobar()">Comprobar</button>
@@ -260,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <br>
     <br>
-        <div id="form-container3" style="display:none;">
+    <div id="form-container3" style="display:none;">
                 <h1>Editar actividad</h1>
 
                 <!-- Formulario -->
@@ -285,19 +253,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <br>
                         </div>
                     <?php endfor; ?>
-                    <!--<img id="preview<?php echo $i; ?>" src="#" alt="Vista previa" style="display: none; max-width: 100px;">-->
+                    
                 <div class="botones-formulario">
                     <button type="submit" id="enviar">Guardar Cambios</button>
                     <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
                 </div>    
-                </form>
+            </form>
                 
         </div>
    
 
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
-<br><br>
+        <br><br>
         <div class="button-group">
             <!--    <button onclick="showAsignaturas()">Asignaturas</button> -->
             <button onclick="window.location.href='../../../perfil.php'">
@@ -319,12 +287,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
     </div>
-</div>
+
 
 
    <script>
     // Función para mostrar u ocultar el perfil completo
-    function toggleProfile() {
+    
+    
+            
+    function showAsignaturas() {
+        alert("Mostrando las asignaturas del usuario...");
+    }
+
+    function showPerfilCompleto() {
+        alert("Mostrando el perfil completo del usuario...");
+    }
+
+     function toggleProfile() {
         const userName = document.getElementById('userName');
         const doorContent = document.getElementById('doorContent');
 
@@ -336,16 +315,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             doorContent.style.display = 'none'; // Ocultar la información del perfil
         }
     }
-            
-    function showAsignaturas() {
-        alert("Mostrando las asignaturas del usuario...");
-    }
-
-    function showPerfilCompleto() {
-        alert("Mostrando el perfil completo del usuario...");
-    }
-
-    function mostrarFormulario() {
+   function mostrarFormulario() {
         var formulario = document.getElementById('form-container3' );
         if (formulario.style.display === 'none') {
             formulario.style.display = 'block';
@@ -353,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             formulario.style.display = 'none';
         }
     }
-
+    
     function noMostrarFormulario() {
         var formulario = document.getElementById('form-container3' );
         if (formulario.style.display === 'block') {
@@ -362,8 +332,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             formulario.style.display = 'block';
         }
     }
-
    
+    // Pasar las variables de PHP a JavaScript
+    window.palabrasCorrectas = <?php echo json_encode($palabras); ?>;
+    window.nombresImagenes = <?php echo json_encode($imagenes); ?>;
+    
 </script>
 
 <!-- En español.php -->
