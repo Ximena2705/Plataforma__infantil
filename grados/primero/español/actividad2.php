@@ -1,6 +1,6 @@
 <?php
-
 include('../../../header.php');
+include('../../../conexion.php'); // Incluir conexión
 
 if (!isset($_SESSION['documento'])) {
     header("Location: ../../../login.php");
@@ -11,28 +11,131 @@ if (!isset($_SESSION['documento'])) {
 $documento = $_SESSION['documento'];
 $tipo_persona = $_SESSION['tipo_persona'];
 
-// Inicializar las variables para los nombres, grado y asignatura
-
+// Inicializar las variables
 $grado = '';
 
 
-// Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
+if ($tipo_persona == 'estudiante') {
+    $sql = "SELECT grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
+    $resultado = $conn->query($sql);
 
-    if ($tipo_persona == 'estudiante') {
-    $sql = "SELECT  grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
-}
-
-$resultado = $conn->query($sql);
-
-if ($resultado && $resultado->num_rows > 0) {
-    $row = $resultado->fetch_assoc();
-
-    if ($tipo_persona == 'estudiante') {
+    if ($resultado && $resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
         $grado = $row['grado'];
+    }
+}
+// ID de juego
+$id2 = "juego2_esp1";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $titulo2 = $_POST['titulo2'] ?? '';
+    $descripcion2 = $_POST['descripcion2'] ?? '';
+
+    // Preguntas y respuestas
+    $preguntas = [
+        "pregunta1" => $_POST['pregunta1'] ?? '',
+        "pregunta2" => $_POST['pregunta2'] ?? '',
+        "pregunta3" => $_POST['pregunta3'] ?? ''
+    ];
+
+    $r_correcta1 = $_POST['respuesta1_1'] ?? '';
+    $r_falsa1 = $_POST['respuesta1_2'] ?? '';
+    $r_falsa11 = $_POST['respuesta1_3'] ?? '';
+
+    $r_correcta2 = $_POST['respuesta2_1'] ?? '';
+    $r_falsa2 = $_POST['respuesta2_2'] ?? '';
+    $r_falsa22 = $_POST['respuesta2_3'] ?? '';
+
+    $r_correcta3 = $_POST['respuesta3_1'] ?? '';
+    $r_falsa3 = $_POST['respuesta3_2'] ?? '';
+    $r_falsa33 = $_POST['respuesta3_3'] ?? '';
+
+    // Query de actualización
+    $sql = "UPDATE juego2 SET 
+                titulo2 = ?, descripcion2 = ?, 
+                pregunta1 = ?, r_correcta1 = ?, r_falsa1 = ?, r_falsa11 = ?, 
+                pregunta2 = ?, r_correcta2 = ?, r_falsa2 = ?, r_falsa22 = ?, 
+                pregunta3 = ?, r_correcta3 = ?, r_falsa3 = ?, r_falsa33 = ? 
+            WHERE id2 = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        "sssssssssssssss",
+        $titulo2, $descripcion2,
+        $preguntas['pregunta1'], $r_correcta1, $r_falsa1, $r_falsa11,
+        $preguntas['pregunta2'], $r_correcta2, $r_falsa2, $r_falsa22,
+        $preguntas['pregunta3'], $r_correcta3, $r_falsa3, $r_falsa33,
+        $id2
+    );
+
+    if ($stmt->execute()) {
+        echo "✅ Datos actualizados correctamente.";
+    } else {
+        echo "❌ Error al actualizar los datos: " . $stmt->error;
     }
 }
 
 
+
+
+// Consulta SQL para obtener los datos del juego específico
+$sql = "SELECT * FROM juego2 WHERE id2 = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $id2);
+$stmt->execute();
+$resultado = $stmt->get_result();
+
+if ($resultado->num_rows > 0) {
+    $row = $resultado->fetch_assoc();
+
+    // Asignar valores a variables
+    $titulo2 = $row['titulo2'];
+    $descripcion2 = $row['descripcion2'];
+
+    // Preguntas y respuestas
+    $pregunta1 = $row['pregunta1'];
+    $r_correcta1 = $row['r_correcta1'];
+    $r_falsa1 = $row['r_falsa1'];
+    $r_falsa11 = $row['r_falsa11'];
+
+    $pregunta2 = $row['pregunta2'];
+    $r_correcta2 = $row['r_correcta2'];
+    $r_falsa2 = $row['r_falsa2'];
+    $r_falsa22 = $row['r_falsa22'];
+
+    $pregunta3 = $row['pregunta3'];
+    $r_correcta3 = $row['r_correcta3'];
+    $r_falsa3 = $row['r_falsa3'];
+    $r_falsa33 = $row['r_falsa33'];
+
+    // Aleatorizar opciones de respuesta
+    $opciones1 = [
+        ["texto" => $r_correcta1, "correcto" => true],
+        ["texto" => $r_falsa1, "correcto" => false],
+        ["texto" => $r_falsa11, "correcto" => false]
+    ];
+    shuffle($opciones1); // Mezclar opciones
+
+    $opciones2 = [
+        ["texto" => $r_correcta2, "correcto" => true],
+        ["texto" => $r_falsa2, "correcto" => false],
+        ["texto" => $r_falsa22, "correcto" => false]
+    ];
+    shuffle($opciones2); // Mezclar opciones
+
+    $opciones3 = [
+        ["texto" => $r_correcta3, "correcto" => true],
+        ["texto" => $r_falsa3, "correcto" => false],
+        ["texto" => $r_falsa33, "correcto" => false]
+    ];
+    shuffle($opciones3); // Mezclar opciones
+
+} else {
+    echo "No se encontró el juego.";
+    exit();
+}
+    $stmt->close();
+    $conn->close();
 ?>
 
 
@@ -96,82 +199,50 @@ if ($resultado && $resultado->num_rows > 0) {
     <?php endif; ?>
 </div>
 <div id="juego2"> 
-    <h3 class="titulo-actividad" id="titulo" >Actividad:</h3> 
-    <h3>Descripción </h3>
+    <h3 class="titulo-actividad" id="titulo" ><?php echo htmlspecialchars($titulo2); ?></h3> 
+    <h3><?php echo htmlspecialchars($descripcion2); ?></h3>
     <div class="grid-container2">
         <div class="juego-container" id="contenedor1">
             <!--<img src="../../../imagenes/juegos/mamá.webp" alt="" id="imagen-pregunta">-->
             <!--<h1>Ma </h1><span data-correcto="true"> </span>-->
-            <h1>Ma </h1>
+            <h1><?php echo htmlspecialchars($pregunta1); ?></h1>
             <br>
             <div class="opciones">
-                <div class="opcion" data-correcto="false">pa</div>
-                <div class="opcion" data-correcto="false">sa</div>
-                <div class="opcion" data-correcto="true">má</div>
+                <?php foreach ($opciones1 as $opcion): ?>
+                    <div class="opcion" data-correcto="<?php echo $opcion['correcto'] ? 'true' : 'false'; ?>">
+                        <?php echo htmlspecialchars($opcion['texto']); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
         <div class="juego-container" id="contenedor2">
             <!--<img src="../../../imagenes/juegos/papá.webp" alt="" id="imagen-pregunta">-->
             <!--<h1>Pa </h1><span data-correcto="true"> </span>-->
-            <h1>Pa </h1>
+            <h1><?php echo htmlspecialchars($pregunta2); ?></h1>
             <br>
             <div class="opciones">
-                <div class="opcion" data-correcto="false">má</div>
-                <div class="opcion" data-correcto="true">pá</div>
-                <div class="opcion" data-correcto="false">to</div>
+                <?php foreach ($opciones2 as $opcion): ?>
+                    <div class="opcion" data-correcto="<?php echo $opcion['correcto'] ? 'true' : 'false'; ?>">
+                        <?php echo htmlspecialchars($opcion['texto']); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
         <div class="juego-container" id="contenedor3">
             <!--<img src="../../../imagenes/juegos/sapo.webp" alt="" id="imagen-pregunta">-->
             <!--<h1> Sa </h1><span data-correcto="true"> </span>-->
-            <h1> Sa </h1>
+            <h1><?php echo htmlspecialchars($pregunta3); ?></h1>
             <br>
             <div class="opciones">
-                <div class="opcion" data-correcto="true">po</div>
-                <div class="opcion" data-correcto="false">lón</div>
-                <div class="opcion" data-correcto="false">lsa</div>
-
+                <?php foreach ($opciones3 as $opcion): ?>
+                    <div class="opcion" data-correcto="<?php echo $opcion['correcto'] ? 'true' : 'false'; ?>">
+                        <?php echo htmlspecialchars($opcion['texto']); ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
-
-        <!--<div class="juego-container" id="contenedor4">
-            <img src="../../../imagenes/juegos/mesa.webp" alt="" id="imagen-pregunta">-->
-            <!--<h1>Me </h1><span data-correcto="true"> </span>
-            <h1>Me </h1>
-            <br>
-            <div class="opciones">
-                <div class="opcion" data-correcto="false">lón</div>
-                <div class="opcion" data-correcto="true">sa</div>
-                <div class="opcion" data-correcto="false">ta</div>
-
-            </div>
-        </div>-->
-
-        <!--<div class="juego-container" id="contenedor5">
-            <img src="../../../imagenes/juegos/pato.webp" alt="" id="imagen-pregunta">-->
-            <!--<h1> Pa</h1><span data-correcto="true"> </span>
-            <h1> Pa</h1>
-            <br>
-            <div class="opciones">
-                <div class="opcion" data-correcto="true">to</div>
-                <div class="opcion" data-correcto="false">sa</div>
-                <div class="opcion" data-correcto="false">lo</div>
-            </div>
-        </div>-->
-
-        <!--<div class="juego-container" id="contenedor6">
-            <img src="../../../imagenes/juegos/rosa.webp" alt="" id="imagen-pregunta">-->
-            <!--<h1> Ro</h1><span data-correcto="true"> </span>
-            <h1> Ro</h1>
-            <br>
-            <div class="opciones">
-                <div class="opcion" data-correcto="false">pa</div>
-                <div class="opcion" data-correcto="true">sa</div>
-                <div class="opcion" data-correcto="false">to</div>
-            </div>
-        </div>-->
         
     </div>
     <div class="botones-juego">
@@ -188,156 +259,81 @@ if ($resultado && $resultado->num_rows > 0) {
         <h1>Editar actividad</h1>
         <!-- Formulario -->
         <form action="" method="POST">
+            <input type="hidden" name="id2" value="juego2_esp1">
             <div class="field-group2">
-                <label for="tituloJuego">Título del Juego:</label>
-                <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+                <label for="titulo2">Título del Juego:</label>
+                <input type="text" id="titulo2" name="titulo2" placeholder="Título del juego" required>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Descripción:</label>
-                <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+                <label for="descripcion2">Descripción:</label>
+                <textarea id="descripcion2" name="descripcion2" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
             </div>
             <!-- Preguntas y respuestas 1-->
             <h3>Pregunta 1</h3>
             <div class="field-group2">
-                <label for="descripcionJuego">Pregunta:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe la pregunta 1:" rows="4" required></input>
+                <label for="pregunta1">Pregunta:</label>
+                <input type="text" id="pregunta1" name="pregunta1" placeholder="Escribe la pregunta 1:" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 1:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta1_1">Respuesta 1:</label>
+                <input type="text" id="respuesta1_1" name="respuesta1_1" placeholder="Correcta" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 2:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta1_2">Respuesta 2:</label>
+                <input type="text" id="respuesta1_2" name="respuesta1_2" placeholder="Falsa" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 3:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta1_3">Respuesta 3:</label>
+                <input type="text" id="respuesta1_3" name="respuesta1_3" placeholder="Falsa" rows="4" required></input>
             </div>
             <br>
             <!-- Preguntas y respuestas 2-->
             <h3>Pregunta 2</h3>
             <div class="field-group2">
-                <label for="descripcionJuego">Pregunta:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe la pregunta 1:" rows="4" required></input>
+                <label for="pregunta2">Pregunta:</label>
+                <input type="text" id="pregunta2" name="pregunta2" placeholder="Escribe la pregunta 2:" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 1:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta2_1">Respuesta 1:</label>
+                <input type="text" id="respuesta2_1" name="respuesta2_1" placeholder="Correcta" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 2:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta2_2">Respuesta 2:</label>
+                <input type="text" id="respuesta2_2" name="respuesta2_2" placeholder="Falsa" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 3:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta2_3">Respuesta 3:</label>
+                <input type="text" id="respuesta2_3" name="respuesta2_3" placeholder="Falsa" rows="4" required></input>
             </div>
             <br>
             <!-- Preguntas y respuestas 3-->
             <h3>Pregunta 3</h3>
             <div class="field-group2">
-                <label for="descripcionJuego">Pregunta:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe la pregunta 1:" rows="4" required></input>
+                <label for="pregunta3">Pregunta:</label>
+                <input type="text" id="pregunta3" name="pregunta3" placeholder="Escribe la pregunta 3:" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 1:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta3_1">Respuesta 1:</label>
+                <input type="text" id="respuesta3_1" name="respuesta3_1" placeholder="Correcta" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 2:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta3_2">Respuesta 2:</label>
+                <input type="text" id="respuesta3_2" name="respuesta3_2" placeholder="Falsa" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 3:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
+                <label for="respuesta3_3">Respuesta 3:</label>
+                <input type="text" id="respuesta3_3" name="respuesta3_3" placeholder="Falsa" rows="4" required></input>
             </div>
             <br>
-            <!-- Preguntas y respuestas 4-->
-            <h3>Pregunta 4</h3>
-            <div class="field-group2">
-                <label for="descripcionJuego">Pregunta:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe la pregunta 1:" rows="4" required></input>
+
+            <div class="botones-formulario">
+                <button id="enviar">Guardar Cambios</button>
+                <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
             </div>
-            <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 1:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
-            </div>
-            <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 2:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
-            </div>
-            <div class="field-group2">
-                <label for="descripcionJuego">Respuesta 3:</label>
-                <input type="text" id="respuestaJuego" name="respuestaJuego" placeholder="Escribe una respuesta y señala si es correcta o no:" rows="4" required></input>
-                <select name="tipo-respuesta" id="tipo-respuesta" required >
-                    <option value="">¿Correcta o falsa?</option>
-                    <option value="correcta">Correcta</option>
-                    <option value="falsa">Falsa</option>
-                </select>
-            </div>
-            <br>
+
         </form>
 
-        <div class="botones-formulario">
-             <button id="enviar">Guardar Cambios</button>
-            <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
-        </div>
+        
     </div>
     <br>
     <br>

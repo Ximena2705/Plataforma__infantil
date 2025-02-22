@@ -40,8 +40,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $descripcion = $_POST['descripcion'] ?? '';
 
     $rutaImagenes = "../../../imagenes/juegos/";
-    $nombres_imagenes = [];
 
+    // 🔹 1️⃣ **Eliminar imágenes antiguas antes de subir nuevas**
+    $sql = "SELECT imagen1, imagen2, imagen3, imagen4, imagen5, imagen6 FROM juego1 WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    
+    if ($resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
+        for ($i = 1; $i <= 6; $i++) {
+            if (!empty($row["imagen$i"])) {
+                $rutaArchivoViejo = $row["imagen$i"];
+                if (file_exists($rutaArchivoViejo)) {
+                    unlink($rutaArchivoViejo); // 🗑️ Borrar archivo viejo
+                }
+            }
+        }
+    }
+    $stmt->close();
+
+    // 🔹 2️⃣ **Ahora subir nuevas imágenes**
+    $nombres_imagenes = [];
     for ($i = 1; $i <= 6; $i++) {
         $nombreCampo = "imagen" . $i;
         $nombreImagenCampo = "nombre_imagen" . $i;
@@ -128,11 +149,6 @@ if ($resultado->num_rows > 0) {
 $stmt->close();
 $conn->close();
 ?>
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="es">
