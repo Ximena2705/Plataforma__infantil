@@ -178,7 +178,7 @@ $conn->close();
 
         <?php if ($tipo_persona == 'estudiante'): ?>
             <?php 
-                // Determinar la página según el grado
+                //Determinar la página según el grado
                 $paginaGrado = '';
                 if ($grado == 'primero' || $grado == 'Primero') {
                     $paginaGrado = '../inicio.php';

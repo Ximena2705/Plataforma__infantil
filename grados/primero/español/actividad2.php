@@ -204,7 +204,7 @@ if ($resultado->num_rows > 0) {
     <div class="grid-container2">
         <div class="juego-container" id="contenedor1">
             <!--<img src="../../../imagenes/juegos/mamá.webp" alt="" id="imagen-pregunta">-->
-            <!--<h1>Ma </h1><span data-correcto="true"> </span>-->
+            <!--<h1></h1><span data-correcto="true"> </span>-->
             <h1><?php echo htmlspecialchars($pregunta1); ?></h1>
             <br>
             <div class="opciones">
