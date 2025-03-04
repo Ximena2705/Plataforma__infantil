@@ -1,6 +1,7 @@
 <?php
 
 include('../../../header.php');
+include('../../../conexion.php'); // Conectar a la base de datos
 
 if (!isset($_SESSION['documento'])) {
     header("Location: ../../../login.php");
@@ -18,7 +19,7 @@ $grado = '';
 
 // Dependiendo del tipo de persona, hacer la consulta en la tabla correspondiente
 
-    if ($tipo_persona == 'estudiante') {
+if ($tipo_persona == 'estudiante') {
     $sql = "SELECT  grado FROM estudiante WHERE tarjeta_identidad = '$documento'";
 }
 
@@ -31,6 +32,94 @@ if ($resultado && $resultado->num_rows > 0) {
         $grado = $row['grado'];
     }
 }
+
+
+// Si se envió el formulario, actualizar los datos en la base de datos
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id3 = $_POST['id3'];
+    $titulo3 = $_POST['titulo3'];
+    $descripcion3 = $_POST['descripcion3'];
+    $tema1 = $_POST['tema1'];
+    $palabra1_1 = $_POST['palabra1_1'];
+    $palabra2_1 = $_POST['palabra2_1'];
+    $palabra3_1 = $_POST['palabra3_1'];
+    $tema2 = $_POST['tema2'];
+    $palabra1_2 = $_POST['palabra1_2'];
+    $palabra2_2 = $_POST['palabra2_2'];
+    $palabra3_2 = $_POST['palabra3_2'];
+
+    // Actualizar la fila en la tabla juego3 donde id3 = 'juego3_esp1'
+    $sqlUpdate = "UPDATE juego3 SET 
+                    titulo3 = '$titulo3',
+                    descripcion3 = '$descripcion3',
+                    tema1 = '$tema1',
+                    palabra1_1 = '$palabra1_1',
+                    palabra2_1 = '$palabra2_1',
+                    palabra3_1 = '$palabra3_1',
+                    tema2 = '$tema2',
+                    palabra1_2 = '$palabra1_2',
+                    palabra2_2 = '$palabra2_2',
+                    palabra3_2 = '$palabra3_2'
+                WHERE id3 = '$id3'";
+
+    if ($conn->query($sqlUpdate) === TRUE) {
+        echo "<script>alert('Actividad actualizada correctamente');</script>";
+        echo "ID3: $id3, Título: $titulo3, Descripción: $descripcion3"; 
+
+    } else {
+        echo "<script>alert('Error al actualizar: " . $conn->error . "');</script>";
+    }
+}
+
+// Obtener datos de la actividad en juego3
+$id3 = 'juego3_esp1'; // ID fijo
+$sqlJuego = "SELECT * FROM juego3 WHERE id3 = '$id3'";
+$resultadoJuego = $conn->query($sqlJuego);
+
+// Inicializar variables con valores vacíos
+$titulo3 = $descripcion3 = $tema1 = $palabra1_1 = $palabra2_1 = $palabra3_1 = '';
+$tema2 = $palabra1_2 = $palabra2_2 = $palabra3_2 = '';
+
+
+if ($resultadoJuego && $resultadoJuego->num_rows > 0) {
+    $juego = $resultadoJuego->fetch_assoc();
+    $titulo3 = $juego['titulo3'];
+    $descripcion3 = $juego['descripcion3'];
+    $tema1 = $juego['tema1'];
+    $palabra1_1 = $juego['palabra1_1'];
+    $palabra2_1 = $juego['palabra2_1'];
+    $palabra3_1 = $juego['palabra3_1'];
+    $tema2 = $juego['tema2'];
+    $palabra1_2 = $juego['palabra1_2'];
+    $palabra2_2 = $juego['palabra2_2'];
+    $palabra3_2 = $juego['palabra3_2'];
+}
+// Obtener las palabras y su grupo correcto desde la base de datos
+$mapaClasificacion = [
+    $palabra1_1 => "grupo1",
+    $palabra2_1 => "grupo1",
+    $palabra3_1 => "grupo1",
+    $palabra1_2 => "grupo2",
+    $palabra2_2 => "grupo2",
+    $palabra3_2 => "grupo2"
+];
+
+// Convertir el array de PHP a JSON para enviarlo a JavaScript
+$mapaClasificacionJSON = json_encode($mapaClasificacion);
+
+
+// 🔀 Mezclar las palabras antes de enviarlas al HTML
+$palabras = [$palabra1_1, $palabra2_1, $palabra3_1, $palabra1_2, $palabra2_2, $palabra3_2];
+shuffle($palabras);
+
+// Reasignar las palabras mezcladas
+$palabra1_1 = $palabras[0];
+$palabra2_1 = $palabras[1];
+$palabra3_1 = $palabras[2];
+$palabra1_2 = $palabras[3];
+$palabra2_2 = $palabras[4];
+$palabra3_2 = $palabras[5];
+
 
 
 ?>
@@ -46,7 +135,12 @@ if ($resultado && $resultado->num_rows > 0) {
     <link rel="stylesheet" href="../../../stilos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
+    
+    <script>
+        // Convertir el JSON de PHP a un objeto en JavaScript
+        const mapaClasificacion = <?php echo $mapaClasificacionJSON; ?>;
+        //console.log("Mapa de Clasificación generado en PHP:", mapaClasificacion);
+    </script>
 </head>
 <body>
 <div class="background-image">
@@ -95,26 +189,38 @@ if ($resultado && $resultado->num_rows > 0) {
     <?php endif; ?>
 </div>
 <div id="juego3">
-    <h3 class="titulo-actividad" id="titulo" >Actividad: </h3> 
-    <h3>Arrastra donde corresponde </h3>
+    <h3 class="titulo-actividad" id="titulo" ><?php echo htmlspecialchars($titulo3); ?></h3> 
+    <h3><?php echo htmlspecialchars($descripcion3); ?></h3>
 
     <div class="contenedorElementos">
-        <span id="elemento1" class="elemento" draggable="true" ondragstart="arrastrar(event)">Gato</span>
-        <span id="elemento2" class="elemento" draggable="true" ondragstart="arrastrar(event)">Perro</span>
-        <span id="elemento3" class="elemento" draggable="true" ondragstart="arrastrar(event)">Conejo</span>
-        <span id="elemento4" class="elemento" draggable="true" ondragstart="arrastrar(event)">Elefante</span>
-        <span id="elemento5" class="elemento" draggable="true" ondragstart="arrastrar(event)">Jirafa</span>
-        <span id="elemento6" class="elemento" draggable="true" ondragstart="arrastrar(event)">León</span>
+        <span id="elemento1" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra1_1; ?>">
+            <?php echo $palabra1_1; ?>
+        </span>
+        <span id="elemento2" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra2_1; ?>">
+            <?php echo $palabra2_1; ?>
+        </span>
+        <span id="elemento3" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra3_1; ?>">
+            <?php echo $palabra3_1; ?>
+        </span>
+        <span id="elemento4" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra1_2; ?>">
+            <?php echo $palabra1_2; ?>
+        </span>
+        <span id="elemento5" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra2_2; ?>">
+            <?php echo $palabra2_2; ?>
+        </span>
+        <span id="elemento6" class="elemento" draggable="true" ondragstart="arrastrar(event)" data-palabra="<?php echo $palabra3_2; ?>">
+            <?php echo $palabra3_2; ?>
+        </span>
     </div>
 
 
     <div class="grupos">
     <div class="grupo" id="grupo1" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-        <h2>Domésticos</h2>
+        <h2><?php echo $tema1; ?></h2>
         <!-- Aquí se agregarán las imágenes de los animales domésticos -->
     </div>
     <div class="grupo" id="grupo2" ondrop="soltar(event)" ondragover="permitirSoltar(event)">
-        <h2>Salvajes</h2>
+        <h2><?php echo $tema2; ?></h2>
         <!-- Aquí se agregarán las imágenes de los animales salvajes -->
     </div>
 </div>
@@ -132,101 +238,59 @@ if ($resultado && $resultado->num_rows > 0) {
         <h1>Editar actividad</h1>
         <!-- Formulario -->
         <form action="" method="POST">
+            <input type="hidden" name="id3" value="juego3_esp1">
             <div class="field-group2">
-                <label for="tituloJuego">Título del Juego:</label>
-                <input type="text" id="tituloJuego" name="tituloJuego" placeholder="Título del juego" required>
+                <label for="titulo3">Título del Juego:</label>
+                <input type="text" id="titulo3" name="titulo3" placeholder="Título del juego" required>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Descripción:</label>
-                <textarea id="descripcionJuego" name="descripcionJuego" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
+                <label for="descripcion3">Descripción:</label>
+                <textarea id="descripcion3" name="descripcion3" placeholder="Escribe una descripción del juego" rows="4" required></textarea>
             </div>
             <br>
             <!-- Preguntas y respuestas 1-->
+            <h3>Tema 1</h3>
             <div class="field-group2">
-                <label for="descripcionJuego">Tipo 1:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe el tipo 1" rows="4" required></input>
+                <label for="tema1">Escribe el tema 1:</label>
+                <input type="text" id="tema1" name="tema1" placeholder="Escribe aquí" rows="4" required></input>
             </div>
             <div class="field-group2">
-                <label for="descripcionJuego">Tipo 2:</label>
-                <input type="text" id="preguntaJuego" name="preguntaJuego" placeholder="Escribe el tipo 2" rows="4" required></input>
+            <label for="palabra1">Escribe la palabra 1:</label>
+            <input type="text" id="palabra1_1" name="palabra1_1" placeholder="Palabra 1" required>
             </div>
-            <br>
-            <h3>Palabra 1</h3>
             <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra1" name="palabra1" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
+            <label for="palabra1">Escribe la palabra 2:</label>
+            <input type="text" id="palabra2_1" name="palabra2_1" placeholder="Palabra 2" required>
             </div>
-            
-            <br>
-            <h3>Palabra 2</h3>
             <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra2" name="palabra2" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
-            </div>
-            
-            <br>
-            <h3>Palabra 3</h3>
-            <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra3" name="palabra3" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
+            <label for="palabra1">Escribe la palabra 3:</label>
+            <input type="text" id="palabra3_1" name="palabra3_1" placeholder="Palabra 3" required>
             </div>
 
             <br>
-            <h3>Palabra 4</h3>
+            <h3>Tema 2</h3> 
             <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra4" name="palabra4" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
+                <label for="tema2">Escribe el tema 2</label>
+                <input type="text" id="tema2" name="tema2" placeholder="Escribe aquí" rows="4" required></input>
+            </div>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra 1:</label>
+            <input type="text" id="palabra1_2" name="palabra1_2" placeholder="Palabra 1" required>
+            </div>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra 2:</label>
+            <input type="text" id="palabra2_2" name="palabra2_2" placeholder="Palabra 2" required>
+            </div>
+            <div class="field-group2">
+            <label for="palabra1">Escribe la palabra 3:</label>
+            <input type="text" id="palabra3_2" name="palabra3_2" placeholder="Palabra 3" required>
             </div>
 
-            <br>
-            <h3>Palabra 5</h3>
-            <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra5" name="palabra5" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
-            </div>
-
-            <br>
-            <h3>Palabra 6</h3>
-            <div class="field-group2">
-            <label for="palabra1">Escribe la palabra:</label>
-            <input type="text" id="palabra6" name="palabra6" placeholder="Escribe la palabra" required>
-                <select id="tipo-respuesta" name="tipo-respuesta"  required >
-                    <option value="">¿A qué tipo pertenece?</option>
-                    <option value="correcta">Tipo 1</option>
-                    <option value="falsa">Tipo 2</option>
-                </select>
+            <div class="botones-formulario">
+                <button id="enviar" type="submit">Guardar Cambios</button>
+                <button id="cancelar" type="button" onclick="noMostrarFormulario()">Cancelar</button>
             </div>
         </form>
-
-        <div class="botones-formulario">
-             <button id="enviar">Guardar Cambios</button>
-            <button id="cancelar" onclick= "noMostrarFormulario()">Cancelar</button>
-        </div>
     </div>
     <!-- Contenedor de perfil que se muestra al hacer clic en el botón -->
     <div class="door-content" id="doorContent" style="display: none;">
@@ -295,7 +359,7 @@ if ($resultado && $resultado->num_rows > 0) {
             formulario.style.display = 'block';
         }
     }
-    
+
 </script>
 
 <!-- En español.php -->
