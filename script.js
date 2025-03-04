@@ -225,70 +225,78 @@ document.addEventListener('DOMContentLoaded', () => {
 /*-------------------------------------------------------------JUEGO 3----------------------------------------------------*/
 if (juego3) {
     // Función para iniciar el arrastre de un elemento
-function arrastrar(event) {
-    event.dataTransfer.setData("text", event.target.id);
-}
-
-// Función para permitir que los elementos sean soltados
-function permitirSoltar(event) {
-    event.preventDefault();
-}
-
-// Función para manejar el evento de soltar un elemento
-function soltar(event) {
-    event.preventDefault();
-    const idElemento = event.dataTransfer.getData("text");
-    const elemento = document.getElementById(idElemento);
-
-    // Verificar si el destino es un contenedor válido
-    if (event.target.classList.contains("grupo")) {
-        event.target.appendChild(elemento);
+    function arrastrar(event) {
+        event.dataTransfer.setData("text", event.target.getAttribute("data-palabra"));
     }
-}
 
-// Mapa de clasificación: define qué elemento pertenece a qué grupo
-const mapaClasificacion = {
-    elemento1: "grupo1", // Gato -> Domésticos
-    elemento2: "grupo1", // Perro -> Domésticos
-    elemento3: "grupo1", // Conejo -> Domésticos
-    elemento4: "grupo2", // Elefante -> Salvajes
-    elemento5: "grupo2", // Jirafa -> Salvajes
-    elemento6: "grupo2"  // León -> Salvajes
-};
+    // Función para permitir que los elementos sean soltados
+    function permitirSoltar(event) {
+        event.preventDefault();
+    }
 
-// Función para verificar si todos los elementos están en su grupo correcto
-function verificar() {
-    const mensaje = document.getElementById("mensajeActividad");
-    let correcto = true;
+    // Función para manejar el evento de soltar un elemento
+    function soltar(event) {
+        event.preventDefault();
+        const palabra = event.dataTransfer.getData("text");
+        const elemento = document.querySelector(`.elemento[data-palabra="${palabra}"]`);
 
-    Object.keys(mapaClasificacion).forEach(id => {
-        const elemento = document.getElementById(id);
-        const contenedorPadre = elemento.parentElement.id;
-
-        if (contenedorPadre !== mapaClasificacion[id]) {
-            correcto = false;
+        // Buscar el contenedor más cercano con clase "grupo"
+        let destino = event.target.closest(".grupo");
+        
+        if (destino) {
+            destino.appendChild(elemento);
         }
-    });
-
-    if (correcto) {
-        mensaje.style.color = "green";
-        mensaje.textContent = "¡Muy bien! Todos los elementos están en el lugar correcto.";
-    } else {
-        mensaje.style.color = "red";
-        mensaje.textContent = "¡Intenta de nuevo! Algunos elementos no están en el lugar correcto.";
     }
-}
 
-// Función para reiniciar el juego
-function reiniciar() {
-    const contenedorInicial = document.querySelector(".contenedorElementos");
-    document.querySelectorAll(".grupo .elemento").forEach(elemento => {
-        contenedorInicial.appendChild(elemento);
-    });
-    document.getElementById("mensajeActividad").textContent = "";
-}
+    function verificar() {
+        const mensaje = document.getElementById("mensajeActividad");
+        let correcto = true;
+    
+        document.querySelectorAll(".elemento").forEach(elemento => {
+            const palabra = elemento.textContent.trim(); // Obtener la palabra real
+            const contenedorPadre = elemento.closest(".grupo")?.id; // Grupo donde está
+    
+            //console.log(`Palabra: ${palabra}, Contenedor: ${contenedorPadre}, Correcto: ${mapaClasificacion[palabra]}`);
+    
+            if (!contenedorPadre || mapaClasificacion[palabra] !== contenedorPadre) {
+                correcto = false;
+            }
+        });
+    
+        if (correcto) {
+            mensaje.style.color = "green";
+            mensaje.textContent = "¡Muy bien! Todos los elementos están en el lugar correcto.";
+        } else {
+            mensaje.style.color = "red";
+            mensaje.textContent = "¡Intenta de nuevo! Algunos elementos no están en el lugar correcto.";
+        }
+    }
+
+    // Función para reiniciar el juego
+    function reiniciar() {
+        const contenedorInicial = document.querySelector(".contenedorElementos");
+        const elementos = Array.from(document.querySelectorAll(".elemento")); // Obtener todas las palabras
+    
+        // Limpiar el contenedor inicial
+        contenedorInicial.innerHTML = "";
+    
+        // Mezclar los elementos con el algoritmo Fisher-Yates
+        for (let i = elementos.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [elementos[i], elementos[j]] = [elementos[j], elementos[i]]; // Intercambiar posiciones
+        }
+    
+        // Volver a agregar las palabras al contenedor inicial
+        elementos.forEach(elemento => contenedorInicial.appendChild(elemento));
+    
+        // Limpiar los mensajes de validación
+        document.getElementById("mensajeActividad").textContent = "";
+    }
+    
+    
 
     // Asignar las funciones globalmente
+    
     window.arrastrar = arrastrar;
     window.permitirSoltar = permitirSoltar;
     window.soltar = soltar;
